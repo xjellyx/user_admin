@@ -3,7 +3,7 @@ import store from "../store";
 import { MessageBox, Message } from 'element-ui'
 
 const services = axios.create({
-  baseURL: "http://127.0.0.1:8085/api/v1",
+  baseURL: "/api/v1",
   timeout: 6000,
   headers: {
     "Content-Type": "application/json"

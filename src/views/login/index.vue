@@ -37,13 +37,31 @@
                             autocomplete="on"
                             @keyup.native="checkCapslock"
                             @blur="capsTooltip = false"
-                            @keyup.enter.native="handleLogin"
+
                     />
                     <span class="show-pwd" @click="showPwd">
             <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
           </span>
                 </el-form-item>
             </el-tooltip>
+            <el-form-item style="position:relative">
+                <el-input
+                        v-model="loginForm.digits"
+                        name="logVerify"
+                        placeholder="请输入验证码"
+                        style="width:60%"
+                        @keyup.enter.native="handleLogin"
+                />
+                <div class="vPic">
+                    <img    v-if="captchaIcon"
+                            :src="captchaIcon"
+                            width="100%"
+                            height="100%"
+                            alt="请输入验证码"
+                            @click="handleGetCaptcha()"
+                    />
+                </div>
+            </el-form-item>
 
             <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
 
@@ -76,7 +94,7 @@
 <script>
     // import { validUsername } from '@/utils/validate'
     // import SocialSign from './components/SocialSignin'
-
+    import {getCaptcha} from "../../api/captcha"
     export default {
         name: 'Login',
        // components: { SocialSign },
@@ -98,7 +116,9 @@
             return {
                 loginForm: {
                     username: 'admin',
-                    password: '111111'
+                    password: '111111',
+                    digits:'',
+                    captchaId: ''
                 },
                 loginRules: {
                     username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -109,7 +129,8 @@
                 loading: false,
                 showDialog: false,
                 redirect: undefined,
-                otherQuery: {}
+                otherQuery: {},
+                captchaIcon:''
             }
         },
         watch: {
@@ -126,6 +147,7 @@
         },
         created() {
             // window.addEventListener('storage', this.afterQRScan)
+            this.handleGetCaptcha()
         },
         mounted() {
             if (this.loginForm.username === '') {
@@ -169,6 +191,11 @@
                         return false
                     }
                 })
+            },
+            async handleGetCaptcha(){
+                console.log("ssssssssssssssssssssssssss")
+                const res = await getCaptcha()
+                console.log(res)
             },
             getOtherQuery(query) {
                 return Object.keys(query).reduce((acc, cur) => {
@@ -319,6 +346,16 @@
             .thirdparty-button {
                 display: none;
             }
+        }
+    }
+    .vPic {
+        width: 33%;
+        height: 50px;
+        float: right !important;
+        background: #ccc;
+        img {
+            cursor: pointer;
+            vertical-align: middle;
         }
     }
 </style>

@@ -1,10 +1,9 @@
-import Vue from "vue";
 import axios from "axios";
-import router from "../router";
 import store from "../store";
+import { MessageBox, Message } from 'element-ui'
 
 const services = axios.create({
-  url: "http://127.0.0.1:8085/api/v1",
+  baseURL: "http://127.0.0.1:8085/api/v1",
   timeout: 6000,
   headers: {
     "Content-Type": "application/json"
@@ -13,10 +12,36 @@ const services = axios.create({
 
 //
 services.interceptors.request.use((config) => {
-    if (store.getters["token"]) {
-        config.headers["token"] = store.getters["token"]
+    const token = store.getters["user/token"];
+    if (token) {
+        config.headers["token"] = token
     }
+    return config
 
+},error => {
+    return Promise.reject(error)
 })
 
 export default services;
+
+
+services.interceptors.response.use(response =>{
+    const res = response.data
+    if (res.code !==20000){
+        Message({
+            message: res.meta.message || 'Error',
+            type: 'error',
+            duration: 5 * 1000
+        })
+        return Promise.reject(new Error(res.meta.message || 'Error'))
+    }else {
+        return res
+    }
+},error => {
+    Message({
+        message: error,
+        type: 'error',
+        duration: 5 * 1000
+    })
+    return Promise.reject(error)
+})

@@ -3,9 +3,10 @@
         <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
 
             <div class="title-container">
-                <h3 class="title">Login Form</h3>
+                <h3 class="title">欢迎来到后台管理中心</h3>
             </div>
 
+<!--            username-->
             <el-form-item prop="username">
         <span class="svg-container">
           <svg-icon icon-class="user" />
@@ -21,6 +22,7 @@
                 />
             </el-form-item>
 
+<!--            password-->
             <el-tooltip v-model="capsTooltip" content="Caps lock is On" placement="right" manual>
                 <el-form-item prop="password">
           <span class="svg-container">
@@ -44,6 +46,8 @@
           </span>
                 </el-form-item>
             </el-tooltip>
+
+<!--            verify code-->
             <el-form-item style="position:relative">
                 <el-input
                         v-model="loginForm.digits"
@@ -57,7 +61,6 @@
                             :src="captchaIcon"
                             width="100%"
                             height="100%"
-                            alt="请输入验证码"
                             @click="handleGetCaptcha()"
                     />
                 </div>
@@ -92,7 +95,7 @@
 </template>
 
 <script>
-    // import { validUsername } from '@/utils/validate'
+    import { validUsername } from '@/utils/validate'
     // import SocialSign from './components/SocialSignin'
     import {getCaptcha} from "../../api/captcha"
     export default {
@@ -100,7 +103,7 @@
        // components: { SocialSign },
         data() {
             const validateUsername = (rule, value, callback) => {
-                if (!(value)) {
+                if (!validUsername(value)) {
                     callback(new Error('Please enter the correct user name'))
                 } else {
                     callback()
@@ -180,7 +183,8 @@
                         this.loading = true
                         this.$store.dispatch('user/login', this.loginForm)
                             .then(() => {
-                                this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
+                                console.log(this.redirect,"wwwwwwwwwwwwwwwww")
+                               // this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
                                 this.loading = false
                             })
                             .catch(() => {
@@ -193,9 +197,10 @@
                 })
             },
             async handleGetCaptcha(){
-                console.log("ssssssssssssssssssssssssss")
                 const res = await getCaptcha()
-                console.log(res)
+                this.captchaIcon = "data:image/png;base64," + res.data.img
+                this.loginForm.captchaId = res.data.id
+                console.log(this.captchaIcon)
             },
             getOtherQuery(query) {
                 return Object.keys(query).reduce((acc, cur) => {
@@ -259,7 +264,7 @@
                 caret-color: $cursor;
 
                 &:-webkit-autofill {
-                    box-shadow: 0 0 0px 1000px $bg inset !important;
+                    box-shadow: 0 0 0 1000px $bg inset !important;
                     -webkit-text-fill-color: $cursor !important;
                 }
             }
@@ -320,7 +325,7 @@
             .title {
                 font-size: 26px;
                 color: $light_gray;
-                margin: 0px auto 40px auto;
+                margin: 0 auto 40px auto;
                 text-align: center;
                 font-weight: bold;
             }

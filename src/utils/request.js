@@ -3,7 +3,7 @@ import store from "../store";
 import { MessageBox, Message } from 'element-ui'
 
 const services = axios.create({
-  baseURL: "/api/v1",
+  baseURL: "http://docs.olongfen.ltd:8050/api/v1",
   timeout: 6000,
   headers: {
     "Content-Type": "application/json"
@@ -13,6 +13,7 @@ const services = axios.create({
 //
 services.interceptors.request.use((config) => {
     const token = store.getters["user/token"];
+    // console.log(config.baseURL)
     if (token) {
         config.headers["token"] = token
     }
@@ -27,7 +28,7 @@ export default services;
 
 services.interceptors.response.use(response =>{
     const res = response.data
-    if (res.code !==20000){
+    if (res.meta.code !==20000){
         Message({
             message: res.meta.message || 'Error',
             type: 'error',

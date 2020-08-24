@@ -5,11 +5,11 @@ const  state = {
     menuList: []
 }
 
-const getter = {
+const getters = {
     menuList: state => state.menuList
 }
 
-const mutation = {
+const mutations = {
     setMenu(state,list) {
         state.menuList = list
     }
@@ -20,4 +20,12 @@ const actions  ={
        const {data}  = await getMenuList()
 
     }
+}
+
+export default {
+    namespaced: true,
+    state,
+    mutations,
+    actions,
+    getters
 }

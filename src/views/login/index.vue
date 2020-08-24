@@ -255,9 +255,9 @@
 
             input {
                 background: transparent;
-                border: 0px;
+                border: 0;
                 -webkit-appearance: none;
-                border-radius: 0px;
+                border-radius: 0;
                 padding: 12px 5px 12px 15px;
                 color: $light_gray;
                 height: 47px;
@@ -289,7 +289,7 @@
         width: 100%;
         background-color: $bg;
         overflow: hidden;
-        position: fixed;
+        position: absolute;
 
         .login-form {
             position: relative;

@@ -34,10 +34,10 @@ module.exports = {
         open: true,
         proxy:{
             '/api':{
-                target:"http://docs.olongfen.ltd:8050",
+                target:"http://127.0.0.1:8050/",
                 changeOrigin: true,    //是否开启代理
                 pathRewrite: {
-                    '^/api':'',
+                    '^/api':'api',
                 }
             }
         },

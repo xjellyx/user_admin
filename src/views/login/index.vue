@@ -289,6 +289,7 @@
         width: 100%;
         background-color: $bg;
         overflow: hidden;
+        position: fixed;
 
         .login-form {
             position: relative;

@@ -3,12 +3,12 @@
         <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
 
             <div class="title-container">
-                <h3 class="title">欢迎来到后台管理中心</h3>
+                <h3 class="title" style="color: black">欢迎来到后台管理中心</h3>
             </div>
 
 <!--            username-->
             <el-form-item prop="username">
-        <span class="svg-container">
+        <span class="svg-container"      style="color: black">
           <svg-icon icon-class="user" />
         </span>
                 <el-input
@@ -25,7 +25,7 @@
 <!--            password-->
             <el-tooltip v-model="capsTooltip" content="Caps lock is On" placement="right" manual>
                 <el-form-item prop="password">
-          <span class="svg-container">
+          <span class="svg-container"      style="color: black">
             <svg-icon icon-class="password" />
           </span>
                     <el-input
@@ -42,7 +42,7 @@
 
                     />
                     <span class="show-pwd" @click="showPwd">
-            <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+            <svg-icon      style="color: black" :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
           </span>
                 </el-form-item>
             </el-tooltip>
@@ -78,19 +78,19 @@
                     <span>Password : any</span>
                 </div>
 
-                <el-button class="thirdparty-button" type="primary" @click="showDialog=true">
-                    Or connect with
-                </el-button>
+<!--                <el-button class="thirdparty-button" type="primary" @click="showDialog=true">-->
+<!--                    Or connect with-->
+<!--                </el-button>-->
             </div>
         </el-form>
 
-        <el-dialog title="Or connect with" :visible.sync="showDialog">
-            Can not be simulated on local, so please combine you own business simulation! ! !
-            <br>
-            <br>
-            <br>
-            <social-sign />
-        </el-dialog>
+<!--        <el-dialog title="Or connect with" :visible.sync="showDialog">-->
+<!--            Can not be simulated on local, so please combine you own business simulation! ! !-->
+<!--            <br>-->
+<!--            <br>-->
+<!--            <br>-->
+<!--            <social-sign />-->
+<!--        </el-dialog>-->
     </div>
 </template>
 
@@ -280,24 +280,54 @@
 </style>
 
 <style lang="scss" scoped>
-    $bg:#2d3a4b;
+    $bg:linear-gradient( -30deg,#03a9f4 0%,#3a78b7 50%,#262626 50%,#607d8b 100%);
     $dark_gray:#889aa4;
     $light_gray:#eee;
 
     .login-container {
-        min-height: 100%;
+        display: flex;
+        justify-content: center;
+        min-height: 100vh;
         width: 100%;
-        background-color: $bg;
+        background-image: $bg;
         overflow: hidden;
-        position: absolute;
-
+        position: relative;
+        align-items: center;
+        filter: hue-rotate(120deg);
+        animation: animate 10s linear infinite;
+        @keyframes animate {
+            0% {
+                filter: hue-rotate(0deg);
+            }
+            100% {
+                filter: hue-rotate(360deg);
+            }
+        }
         .login-form {
             position: relative;
-            width: 520px;
+            width: 360px;
             max-width: 100%;
-            padding: 160px 35px 0;
+            padding: 50px;
+            height: 480px;
             margin: 0 auto;
             overflow: hidden;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.1);
+            border-radius: 6px;
+            box-shadow: 0 5px 35px rgba(0,0,0,0.2);
+        }
+        .login-form::after {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            right:5px;
+            bottom: 5px;
+            border-radius: 5px;
+            pointer-events: none;
+            background: linear-gradient(to bottom,rgba(255,255,255,0.3) 0%,rgba(255,255,255,0.1) 15%,
+            transparent 85%, rgba(255,255,255,0.3) 100%);
         }
 
         .tips {

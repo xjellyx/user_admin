@@ -183,8 +183,7 @@
                         this.loading = true
                         this.$store.dispatch('user/login', this.loginForm)
                             .then(() => {
-                                console.log(this.redirect,"wwwwwwwwwwwwwwwww")
-                               // this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
+                               this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
                                 this.loading = false
                             })
                             .catch(() => {

@@ -12,7 +12,9 @@ const formatRouter = (routes) => {
         if (item.children && item.children.length > 0) {
             formatRouter(item.children)
         }
-    })
+    }
+    )
+
 }
 
 const  state = {
@@ -45,16 +47,30 @@ const actions  ={
         const baseRouter = [{
             path: '/layout',
             name: 'layout',
-            component: "view/layout/index.vue",
+            component: "views/layout/index.vue",
             meta: {
                 title: "底层layout"
             },
             children: []
         }]
-       const {data}  = await getMenuList()
-        const asyncRouter = data.data
+       const {data}  = await getMenuList(1)
+        const asyncRouter = data
+        asyncRouter.push({
+            path: "404",
+            name: "404",
+            hidden: true,
+            meta: {
+                title: "迷路了*。*",
+            },
+            component: 'view/error/index.vue'
+        })
         formatRouter(asyncRouter)
         baseRouter[0].children = asyncRouter
+        baseRouter.push({
+            path: '*',
+            redirect: '/layout/404'
+
+        })
         asyncRouterHandle(baseRouter)
         commit('setAsyncRouter', baseRouter)
         commit('setRouterList', routerList)

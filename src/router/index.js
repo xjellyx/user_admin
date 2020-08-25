@@ -4,7 +4,7 @@ import Home from '../views/Home.vue'
 
 Vue.use(VueRouter)
 
-  const routes = [
+  const baseRouters = [
     {
       path: '/login',
       name: 'login',
@@ -13,6 +13,15 @@ Vue.use(VueRouter)
       // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "about" */ '../views/login/index')
     },
+    {
+      path: "/404",
+      name: "404",
+      hidden: true,
+      meta: {
+        title: "迷路了*。*",
+      },
+      component: () => import('@/views/error/index.vue')
+    }
 ]
 
 const router = new VueRouter({
@@ -21,7 +30,7 @@ const router = new VueRouter({
   scrollBehavior: () => ({
     y: 0,
   }),
-  routes
+  routes: baseRouters
 })
 
 // reset router
@@ -32,7 +41,7 @@ export function resetRouter() {
     scrollBehavior: () => ({
       y: 0,
     }),
-    routes
+    routes: baseRouters
   }).matcher
 }
 

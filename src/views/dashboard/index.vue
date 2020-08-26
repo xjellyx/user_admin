@@ -1,15 +1,19 @@
 <template>
-    <div>
-        <h1>dashboard</h1>
-    </div>
+ <div class="big">
+    <h1> dashboard </h1>
+ </div>
+
 </template>
 
 <script>
-    export default {
-        name: "index"
+
+
+export default {
+  name: 'Dashboard',
+  data() {
+    return {
+
     }
+  },
+}
 </script>
-
-<style scoped>
-
-</style>

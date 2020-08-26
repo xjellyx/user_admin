@@ -98,6 +98,7 @@
     import { validUsername } from '@/utils/validate'
     // import SocialSign from './components/SocialSignin'
     import {getCaptcha} from "../../api/captcha"
+    import { mapActions } from "vuex";
     export default {
         name: 'Login',
        // components: { SocialSign },
@@ -163,6 +164,7 @@
             // window.removeEventListener('storage', this.afterQRScan)
         },
         methods: {
+            ...mapActions("user",["login"]),
             checkCapslock(e) {
                 const { key } = e
                 this.capsTooltip = key && key.length === 1 && (key >= 'A' && key <= 'Z')
@@ -177,18 +179,11 @@
                     this.$refs.password.focus()
                 })
             },
-            handleLogin() {
-                this.$refs.loginForm.validate(valid => {
+           async handleLogin() {
+                this.$refs.loginForm.validate( async  valid => {
                     if (valid) {
                         this.loading = true
-                        this.$store.dispatch('user/login', this.loginForm)
-                            .then(() => {
-                               this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
-                                this.loading = false
-                            })
-                            .catch(() => {
-                                this.loading = false
-                            })
+                        await this.login(this.loginForm)
                     } else {
                         console.log('error submit!!')
                         return false

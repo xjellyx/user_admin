@@ -1,7 +1,8 @@
 import { login, logout, getInfo } from "@/api/user";
 import Vue from "vue";
 import { getToken, setToken, removeToken } from "@/utils/auth";
-import { resetRouter } from "@/router";
+import { resetRouter } from "@/router/index";
+import router from "@/router/index"
 
 const state = {
   token: getToken(),
@@ -39,7 +40,12 @@ const actions = {
     const token = data["token"];
     if (token) {
       commit("setToken", token);
-      Vue.prototype.notify("welcome !");
+      const redirect = router.history.current.query.redirect
+      if (redirect) {
+        router.push({ path: redirect })
+      } else {
+        router.push({ path: '/layout/dashboard' })
+      }
     } else {
       Vue.prototype.message({
         message: data.meta.message,

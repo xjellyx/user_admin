@@ -1,9 +1,9 @@
 import router from "./router";
 import store from "./store";
 
-const routesWhiteList= ["/login", "/register", "/404", "/401"]
+
 let asyncRouterFlag = 0
-const whiteList = ['login', 'register','404']
+const whiteList = ['login', 'register','404','401']
 // router each moving
 router.beforeEach(async(to, from, next) => {
     const token = store.getters['user/token']
@@ -31,10 +31,7 @@ router.beforeEach(async(to, from, next) => {
         // 不在白名单中并且未登陆的时候
         if (!token) {
             next({
-                name: "login",
-                query: {
-                    redirect: document.location.hash
-                }
+                path:"/login",
             })
         }
     }

@@ -16,6 +16,19 @@ Vue.use(VueRouter)
       // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "about" */ '../views/login/index')
     },
+    {
+      path: "/404",
+      name: "404",
+      hidden: true,
+      meta: {
+        title: "迷路了*。*",
+      },
+      component:() => import( '@/views/error/index.vue')
+    },
+    {
+      path: "*",
+      component:() => import( '@/views/error/index.vue')
+    }
 ]
 
 
@@ -23,6 +36,10 @@ Vue.use(VueRouter)
 const createRouter = () => new VueRouter({
   routes: baseRouters
 })
+
+export function resetRouter() {
+ createRouter()
+}
 
 const router = createRouter()
 

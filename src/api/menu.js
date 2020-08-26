@@ -1,10 +1,9 @@
 import request from '@/utils/request'
 
-export function getMenuList(id) {
+export function getMenuList() {
     return request({
         method:"get",
-        url:"/admin/getMenu",
-        id
+        url:"/admin/getMenuList"
     })
 }
 

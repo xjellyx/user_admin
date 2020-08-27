@@ -49,12 +49,12 @@ const actions  ={
             name: 'layout',
             component: "layout/index.vue",
             meta: {
-                title: "Layout"
+                title: "Layout",
+                icon:"layout",
             },
             children: []
         }]
        const {data}  = await getMenuList()
-
         const asyncRouter = data
         formatRouter(asyncRouter)
         baseRouter[0].children = asyncRouter

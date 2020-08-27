@@ -129,7 +129,7 @@ export default {
         const { fullPath } = view
         this.$nextTick(() => {
           this.$router.replace({
-            path: '/redirect' + fullPath
+            path:  fullPath
           })
         })
       })
@@ -164,7 +164,7 @@ export default {
         // you can adjust it according to your needs.
         if (view.name === 'Dashboard') {
           // to reload home page
-          this.$router.replace({ path: '/redirect' + view.fullPath })
+          this.$router.replace({ path:  view.fullPath })
         } else {
           this.$router.push('/')
         }

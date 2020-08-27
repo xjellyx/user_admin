@@ -184,6 +184,7 @@
                     if (valid) {
                         this.loading = true
                         await this.login(this.loginForm)
+                        await this.$store.dispatch("user/getUserInfo")
                     } else {
                         console.log('error submit!!')
                         return false

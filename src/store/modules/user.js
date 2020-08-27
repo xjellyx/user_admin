@@ -3,6 +3,7 @@ import Vue from "vue";
 import { getToken, setToken, removeToken } from "@/utils/auth";
 import { resetRouter } from "@/router/index";
 import router from "@/router/index"
+import da from "element-ui/src/locale/lang/da";
 
 const state = {
   token: getToken(),
@@ -67,6 +68,9 @@ const actions = {
     //
     if (data.username) {
       commit("setUsername", data.username);
+    }
+    if (data.headIcon) {
+        commit("setAvatar",data.headIcon)
     }
     commit("setUserInfo", data);
   },

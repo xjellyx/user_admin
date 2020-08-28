@@ -20,6 +20,7 @@ const formatRouter = (routes) => {
 const  state = {
     routerList: [],
     asyncRouters: [],
+    menuList: []
 }
 
 const getters = {
@@ -29,6 +30,9 @@ const getters = {
         },
         routerList(state) {
             return state.routerList
+        },
+        menuList(state) {
+            return state.menuList
         }
 }
 
@@ -39,6 +43,9 @@ const mutations = {
     // 设置动态路由
     setAsyncRouter(state, asyncRouters) {
         state.asyncRouters = asyncRouters
+    },
+    setMenuList(state,list) {
+      state.menuList= list
     }
 }
 
@@ -61,6 +68,7 @@ const actions  ={
         asyncRouterHandle(baseRouter)
         commit('setAsyncRouter', baseRouter)
         commit('setRouterList', routerList)
+        commit('setMenuList',data)
 
         return true
     }

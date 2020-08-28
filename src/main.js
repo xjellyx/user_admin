@@ -6,7 +6,7 @@ import store from './store'
 
 import Cookies from 'js-cookie'
 
-// import 'normalize.css/normalize.css'
+import 'normalize.css/normalize.css'
 
 import '@/styles/index.scss' // global css
 
@@ -15,7 +15,6 @@ import './icons' // icon
 import './utils/error-log' // error log
 
 import './styles/element-variables.scss'
-
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import locale from 'element-ui/lib/locale/lang/en' // lang i18n

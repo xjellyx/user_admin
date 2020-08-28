@@ -12,9 +12,9 @@
 
         <screenfull id="screenfull" class="right-menu-item hover-effect" />
 
-        <el-tooltip content="Global Size" effect="dark" placement="bottom">
-          <size-select id="size-select" class="right-menu-item hover-effect" />
-        </el-tooltip>
+<!--        <el-tooltip content="Global Size" effect="dark" placement="bottom">-->
+<!--          <size-select id="size-select" class="right-menu-item hover-effect" />-->
+<!--        </el-tooltip>-->
 
       </template>
 
@@ -33,16 +33,35 @@
           <a target="_blank" href="https://github.com/olongfen/user_admin">
             <el-dropdown-item>Github</el-dropdown-item>
           </a>
-<!--          <a target="_blank" href="https://olongfen.github.io/vue-element-admin-site/#/">-->
-<!--            <el-dropdown-item>Docs</el-dropdown-item>-->
-<!--          </a>-->
+          <!--          <a target="_blank" href="https://olongfen.github.io/vue-element-admin-site/#/">-->
+          <!--            <el-dropdown-item>Docs</el-dropdown-item>-->
+          <!--          </a>-->
+          <el-dropdown-item @click.native="showPassword=true" >Modify Password</el-dropdown-item>
           <el-dropdown-item divided @click.native="logout">
             <span style="display:block;">Log Out</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
+      <el-dialog :visible.sync="showPassword" @close="clearPassword" title="修改密码" width="360px">
+        <el-form :model="pwdModify" :rules="rules" label-width="80px" ref="modifyPwdForm">
+          <el-form-item :minlength="6" label="原密码" prop="password">
+            <el-input show-password v-model="pwdModify.password"></el-input>
+          </el-form-item>
+          <el-form-item :minlength="6" label="新密码" prop="newPassword">
+            <el-input show-password v-model="pwdModify.newPassword"></el-input>
+          </el-form-item>
+          <el-form-item :minlength="6" label="确认密码" prop="confirmPassword">
+            <el-input show-password v-model="pwdModify.confirmPassword"></el-input>
+          </el-form-item>
+        </el-form>
+        <div class="dialog-footer" slot="footer">
+          <el-button @click="showPassword=false">取 消</el-button>
+          <el-button @click="savePassword" type="primary">确 定</el-button>
+        </div>
+      </el-dialog>
     </div>
   </div>
+
 </template>
 
 <script>
@@ -53,6 +72,7 @@ import ErrorLog from '@/components/ErrorLog'
 import Screenfull from '@/components/Screenfull'
 import SizeSelect from '@/components/SizeSelect'
 import Search from '@/components/HeaderSearch'
+import {changeLoginPwd} from "@/api/user";
 
 export default {
   components: {
@@ -63,12 +83,44 @@ export default {
     SizeSelect,
     Search
   },
+  data() {
+    return {
+
+      showPassword: false,
+      pwdModify: {},
+      rules: {
+        password: [
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          { min: 6, message: '最少6个字符', trigger: 'blur' }
+        ],
+        newPassword: [
+          { required: true, message: '请输入新密码', trigger: 'blur' },
+          { min: 6, message: '最少6个字符', trigger: 'blur' }
+        ],
+        confirmPassword: [
+          { required: true, message: '请输入确认密码', trigger: 'blur' },
+          { min: 6, message: '最少6个字符', trigger: 'blur' },
+          {
+            validator: (rule, value, callback) => {
+              if (value !== this.pwdModify.newPassword) {
+                callback(new Error('两次密码不一致'))
+              } else {
+                callback()
+              }
+            },
+            trigger: 'blur'
+          }
+        ]
+      },
+    }
+  },
   computed: {
     ...mapGetters("app",[
       'sidebar',
       'device'
     ]),
-    ...mapGetters("user",["avatar"])
+    ...mapGetters("user",["avatar"]),
+    ...mapGetters('user', ['userInfo']),
   },
   methods: {
     toggleSideBar() {
@@ -77,6 +129,30 @@ export default {
     async logout() {
       await this.$store.dispatch('user/logout')
       this.$router.push(`/login`)
+    },
+    savePassword() {
+      this.$refs.modifyPwdForm.validate(valid => {
+        if (valid) {
+          changeLoginPwd({
+            username: this.userInfo.username,
+            oldPwd: this.pwdModify.password,
+            newPwd: this.pwdModify.newPassword
+          }).then(() => {
+            this.$message.success('success！')
+            this.showPassword = false
+          })
+        } else {
+          return false
+        }
+      })
+    },
+    clearPassword() {
+      this.pwdModify = {
+        password: '',
+        newPassword: '',
+        confirmPassword: ''
+      }
+      this.$refs.modifyPwdForm.clearValidate()
     }
   }
 }

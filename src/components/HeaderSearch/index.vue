@@ -1,180 +1,73 @@
 <template>
-  <div :class="{'show':show}" class="header-search">
-    <svg-icon class-name="search-icon" icon-class="search" @click.stop="click" />
-    <el-select
-      ref="headerSearchSelect"
-      v-model="search"
-      :remote-method="querySearch"
-      filterable
-      default-first-option
-      remote
-      placeholder="Search"
-      class="header-search-select"
-      @change="change"
-    >
-      <el-option v-for="item in options" :key="item.path" :value="item" :label="item.title.join(' > ')" />
-    </el-select>
+  <div class="search-component">
+    <transition name="el-fade-in-linear">
+      <div class="transition-box" style="display: inline-block; " v-show="show">
+        <el-select
+                @blur="hiddenSearch"
+                @change="changeRouter"
+                filterable
+                placeholder="请选择"
+                v-model="value"
+        >
+          <el-option
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                  v-for="item in routerList"
+          ></el-option>
+        </el-select>
+      </div>
+    </transition>
+    <div :style="{display:'inline-block'}">
+      <i @click="show = !show" class="el-icon-search search-icon"></i>
+    </div>
   </div>
 </template>
-
 <script>
-// fuse is a lightweight fuzzy-search module
-// make search results more in line with expectations
-import Fuse from 'fuse.js'
-import path from 'path'
+  import { mapGetters } from 'vuex'
 
-export default {
-  name: 'HeaderSearch',
-  data() {
-    return {
-      search: '',
-      options: [],
-      searchPool: [],
-      show: false,
-      fuse: undefined
-    }
-  },
-  computed: {
-    routes() {
-      return this.$store.getters["router/asyncRouter"]
-    }
-  },
-  watch: {
-    routes() {
-      this.searchPool = this.routes
-    },
-    searchPool(list) {
-      this.initFuse(list)
-    },
-    show(value) {
-      if (value) {
-        document.body.addEventListener('click', this.close)
-      } else {
-        document.body.removeEventListener('click', this.close)
-      }
-    }
-  },
-  mounted() {
-    this.searchPool = this.routes
-  },
-  methods: {
-    click() {
-      this.show = !this.show
-      if (this.show) {
-        this.$refs.headerSearchSelect && this.$refs.headerSearchSelect.focus()
+  export default {
+    name: 'searchComponent',
+    data() {
+      return {
+        value: '',
+        show: false
       }
     },
-    close() {
-      this.$refs.headerSearchSelect && this.$refs.headerSearchSelect.blur()
-      this.options = []
-      this.show = false
+    computed: {
+      ...mapGetters('router', ['routerList'])
     },
-    change(val) {
-      this.$router.push(val.path)
-      this.search = ''
-      this.options = []
-      this.$nextTick(() => {
+    methods: {
+      changeRouter() {
+        this.$router.push({ name: this.value })
+        this.value = ''
+      },
+      hiddenSearch() {
         this.show = false
-      })
-    },
-    initFuse(list) {
-      this.fuse = new Fuse(list, {
-        shouldSort: true,
-        threshold: 0.4,
-        location: 0,
-        distance: 100,
-        maxPatternLength: 32,
-        minMatchCharLength: 1,
-        keys: [{
-          name: 'title',
-          weight: 0.7
-        }, {
-          name: 'path',
-          weight: 0.3
-        }]
-      })
-    },
-    // Filter out the routes that can be displayed in the sidebar
-    // And generate the internationalized title
-    generateRoutes(routes, basePath = '/', prefixTitle = []) {
-      let res = []
-
-      for (const router of routes) {
-        // skip hidden router
-        if (router.hidden) { continue }
-
-        const data = {
-          path: path.resolve(basePath, router.path),
-          title: [...prefixTitle]
-        }
-
-        if (router.meta && router.meta.title) {
-          data.title = [...data.title, router.meta.title]
-
-          if (router.redirect !== 'noRedirect') {
-            // only push the routes with title
-            // special case: need to exclude parent router without redirect
-            res.push(data)
-          }
-        }
-
-        // recursive child routes
-        if (router.children) {
-          const tempRoutes = this.generateRoutes(router.children, data.path, data.title)
-          if (tempRoutes.length >= 1) {
-            res = [...res, ...tempRoutes]
-          }
-        }
-      }
-      return res
-    },
-    querySearch(query) {
-      if (query !== '') {
-        this.options = this.fuse.search(query)
-      } else {
-        this.options = []
       }
     }
   }
-}
 </script>
-
-<style lang="scss" scoped>
-.header-search {
-  font-size: 0 !important;
-
-  .search-icon {
-    cursor: pointer;
-    font-size: 18px;
-    vertical-align: middle;
-  }
-
-  .header-search-select {
-    font-size: 18px;
-    transition: width 0.2s;
-    width: 0;
-    overflow: hidden;
-    background: transparent;
-    border-radius: 0;
+<style lang="scss">
+  .search-component {
     display: inline-block;
-    vertical-align: middle;
-
-    ::v-deep .el-input__inner {
-      border-radius: 0;
-      border: 0;
-      padding-left: 0;
-      padding-right: 0;
-      box-shadow: none !important;
-      border-bottom: 1px solid #d9d9d9;
+    .el-input__inner {
+      border: none;
+      border-bottom: 1px solid #606266;
+    }
+    .el-dropdown-link {
+      cursor: pointer;
+    }
+    .search-icon {
+      font-size: 20px;
+      margin-right: 14px;
+      display: inline-block;
       vertical-align: middle;
+      box-sizing: border-box;
+      color: #606266;
+    }
+    .dropdown-group {
+      min-width: 100px;
     }
   }
-
-  &.show {
-    .header-search-select {
-      width: 210px;
-      margin-left: 10px;
-    }
-  }
-}
 </style>

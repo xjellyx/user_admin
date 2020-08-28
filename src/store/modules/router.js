@@ -51,6 +51,7 @@ const actions  ={
             meta: {
                 title: "Layout",
                 icon:"layout",
+                affix:true
             },
             children: []
         }]

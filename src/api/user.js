@@ -22,3 +22,11 @@ export function logout() {
     method: "post"
   });
 }
+
+export function changeLoginPwd(data) {
+  return request({
+    url:"/user/modifyLoginPwd",
+    method:'put',
+    data
+  })
+}

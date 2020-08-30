@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import Qs from 'qs'
 
 import App from './App.vue'
 import router from './router'
@@ -34,6 +35,7 @@ Object.keys(filters).forEach(key => {
 
 Vue.config.productionTip = false
 Vue.prototype.$notify = Notification
+Vue.prototype.$qs = Qs
 new Vue({
   router,
   store,

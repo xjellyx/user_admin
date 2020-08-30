@@ -30,3 +30,18 @@ export function changeLoginPwd(data) {
     data
   })
 }
+
+export function getUserList(data) {
+  return request({
+    url:"/admin/listUser",
+    method:'get',
+    params:data
+  })
+}
+
+export function getUserTotal() {
+  return request({
+    url:"/admin/userTotal",
+    method:'get'
+  })
+}

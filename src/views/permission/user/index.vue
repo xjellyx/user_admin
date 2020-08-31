@@ -8,42 +8,62 @@
                     prop="id"
                     label="ID"
                     sortable
-                    min-width="180">
+                    align="center"
+                    min-width="30">
             </el-table-column>
             <el-table-column
                     prop="uid"
                     label="UID"
-                    min-width="180">
+                    align="center"
+                    min-width="100">
             </el-table-column>
             <el-table-column
                     prop="createdAt"
-                    label="createdTime"
+                    label="CreatedTime"
                     sortable
-                    min-width="180">
+                    align="center"
+                    min-width="100">
             </el-table-column>
             <el-table-column
                     prop="username"
-                    label="username"
-                    min-width="180">
+                    label="Username"
+                    align="center"
+                    min-width="100">
             </el-table-column>
-            <el-table-column  fixed="right" label="edit" width="350">
+            <el-table-column
+                    label="Role"
+                    align="center"
+                    min-width="60">
                 <template slot-scope="scope">
-                    <!--                    add -->
-                    <el-button type="primary"
-                               size="small"
-                               icon="el-icon-edit"
-                               @click="addMenu(scope.row.id)"
-
-                    >add children</el-button>
+                    <el-select v-model="scope.row.role"
+                               @change="changeAuthority(scope.row)">
+                        <el-option
+                                v-for="item in authOptions"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                        >
+                        </el-option>
+                    </el-select>
+                </template>
+            </el-table-column>
+            <el-table-column
+                    prop="status"
+                    align="center"
+                    label="Status"
+                    min-width="30">
+            </el-table-column>
+            <el-table-column fixed="right"  align="center" label="Edit" min-width="100">
+                <template slot-scope="scope">
                     <!--                    edit-->
                     <el-button type="primary"
                                size="small"
-                               @click="editMenu(scope.row)"
-                               icon="svg-icon-edit" >edit</el-button>
+                               @click="editUser(scope.row.uid)"
+                               icon="el-icon-edit">edit</el-button>
                     <!--                    delete-->
                     <el-button type="danger"
                                size="small"
-                               @click="deleteMenu(scope.row.id)"
+                               @click="deleteUser(scope.row.uid)"
                                icon="el-icon-delete">delete</el-button>
                 </template>
             </el-table-column>
@@ -58,60 +78,147 @@
                 @size-change="handleSizeChange"
                 layout="total, sizes, prev, pager, next, jumper"
         ></el-pagination>
+        <el-dialog
+                title="Edit User"
+                custom-class="user-dialog"
+        >
+            <el-form :inline="true" :rules="rules" ref="userForm"
+                     label-position="top"
+                     label-width="85px"
+                     :model="userInfo">
+                <el-form-item label="Username" label-width="80px" prop="username">
+                    <el-input v-model="userInfo.username"></el-input>
+                </el-form-item>
+                <el-form-item label="Password" label-width="80px" prop="password">
+                    <el-input v-model="userInfo.password"></el-input>
+                </el-form-item>
+                <el-form-item label="Phone" label-width="80px" prop="phone">
+                    <el-input v-model="userInfo.phone"></el-input>
+                </el-form-item>
+            </el-form>
+        </el-dialog>
     </div>
 </template>
 
 <script>
-    import {getUserTotal,getUserList} from "@/api/user";
-
+    import {getUserList,delUser,editUserInfo} from "@/api/user";
+    import moment from 'moment'
     export default {
         name: "User",
         data() {
             return {
+                rules:[],
                 userList: [],
-                page: 1,
+                page: 0,
                 pageSize: 10,
                 total: 0,
+                userInfo:{
+                    password:"",
+                    username: "",
+                    phone: "",
+                },
+                authOptions: [{
+                    value:"0",
+                    label:"general",
+                },
+                    {
+                        value:"1",
+                        label:"admin",
+                    }, {
+                        value:"2",
+                        label:"superAdmin",
+                    }
+                ],
             }
         },
         created() {
-            this.getTotal()
-            this.getList()
+            this.getUserAll()
         },
         methods: {
-            async getTotal(){
-                const {data} = await getUserTotal()
-                this.total = data + 1000
-            },
-            async getList(){
-                const {data} = await getUserList({"pageSize":this.pageSize,"pageNum":this.page})
+            async getUserAll(){
+                const {data} = await getUserList({})
                 this.userList = data
+                this.userList.forEach(item =>{
+                    item.createdAt = moment(item.createdAt).format("YYYY-MM-DD hh:mm:ss")
+                    // 0 role general; 1 role admin; 2 role superAdmin
+                    switch (item.role) {
+                        case 0:
+                            item.role = "general"
+                            break
+                        case 1:
+                            item.role = "admin"
+                            break
+                        case 2:
+                            item.role ="superAdmin"
+                            break
+
+                    }
+                })
+                this.total = this.userList.length
             },
             handleSizeChange(val) {
                 this.pageSize = val
+                this.page = 1
             },
             handleCurrentChange(val) {
                 this.page  = val
-                this.getList()
             },
-            tableRowClassName({row, rowIndex}) {
-                if (rowIndex === 1) {
+            tableRowClassName({row}) {
+                if (row.status === 4) {
                     return 'warning-row';
-                } else if (rowIndex === 3) {
+                } else  {
                     return 'success-row';
                 }
-                return '';
+            },
+            // deleteUser
+            deleteUser(uid){
+                this.$confirm('This operation will permanently delete the menu under all roles, Whether to continue?',
+                    'prompt',{
+                        confirmButtonText: 'Yes',
+                        cancelButtonText: 'No',
+                        type: 'warning'
+                    }
+                ).then(async () => {
+                    const res = await delUser(uid)
+                    if (res.meta.message === "success") {
+                        this.userList.forEach(item =>{
+                            if (item.uid === uid){
+                                this.userList.splice(item,1)
+                            }
+
+                        })
+                        this.$message({
+                            type: 'success',
+                            message: 'success!'})
+                    }
+
+                })
+                    .catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消删除'
+                        })
+                    })
+
+            },
+            async changeAuthority(row){
+                const res = await editUserInfo({uid:row.uid,role:row.role})
+                if (res.meta.message === "success"){
+                    this.$message({
+                        type: 'success',
+                        message: 'success!'})
+                }
+                }
             }
-        }
     }
 </script>
 
-<style scoped>
+<style>
     .el-table .warning-row {
         background-color: oldlace;
     }
 
     .el-table .success-row {
-        background-color: #e914f0;
+        background-color: #ebf9ec;
     }
 </style>

@@ -12,38 +12,38 @@
                 :tree-props="{children: 'children'}">
         >
 <!--            id -->
-            <el-table-column prop="id" label="ID" min-width="120" sortable></el-table-column>
+            <el-table-column align="center" prop="id" label="ID" min-width="120" sortable></el-table-column>
 <!--           name -->
-            <el-table-column prop="name" label="name"  min-width="160" ></el-table-column>
+            <el-table-column align="center" prop="name" label="Name"  min-width="160" ></el-table-column>
 <!--        path    -->
-            <el-table-column prop="path" label="path"  min-width="160"></el-table-column>
+            <el-table-column align="center" prop="path" label="Path"  min-width="200"></el-table-column>
 <!--            component-->
-            <el-table-column prop="component" label="component"  min-width="180"></el-table-column>
+            <el-table-column align="center" prop="component" label="Component"  min-width="200"></el-table-column>
             <!--            parent-->
-            <el-table-column prop="parentId" label="parent"  min-width="100"></el-table-column>
+            <el-table-column align="center" prop="parentId" label="Parent"  min-width="100"></el-table-column>
 <!--            hidden-->
-            <el-table-column prop="hidden" label="hidden"  min-width="100">
+            <el-table-column align="center" prop="hidden" label="Hidden"  min-width="100">
                 <template slot-scope="scope">
                     <span>{{scope.row.hidden?"yes":"no"}}</span>
                 </template>
             </el-table-column>
             <!--            title-->
-            <el-table-column prop="title" label="title"  min-width="100">
+            <el-table-column align="center" prop="title" label="Title"  min-width="120">
                 <template slot-scope="scope">
                     <span>{{scope.row.meta.title}}</span>
                 </template>
             </el-table-column>
             <!--            icon-->
-            <el-table-column prop="icon" label="icon"  min-width="180">
+            <el-table-column align="center" prop="icon" label="Icon"  min-width="180">
                 <template slot-scope="scope">
                     <svg-icon :icon-class="scope.row.meta.icon" style="padding-right: 5px"/>
                     <span>{{scope.row.meta.icon}}</span>
                 </template>
             </el-table-column>
 
-            <el-table-column prop="sort" label="sort" min-width="120" sortable></el-table-column>
+            <el-table-column align="center" prop="sort" label="Sort" min-width="120" sortable></el-table-column>
 <!--            edit-->
-            <el-table-column v-if="isSuperRole()" fixed="right" label="edit" width="350">
+            <el-table-column align="center" v-if="isSuperRole()" fixed="right" label="Edit" width="350">
                 <template slot-scope="scope">
 <!--                    add -->
                     <el-button type="primary"
@@ -56,7 +56,7 @@
                     <el-button type="primary"
                                size="small"
                                @click="editMenu(scope.row)"
-                               icon="svg-icon-edit" >edit</el-button>
+                               icon="el-icon-edit" >edit</el-button>
 <!--                    delete-->
                     <el-button type="danger"
                                size="small"
@@ -134,6 +134,7 @@
 
     export default {
         name: "Menu",
+        // inject: ['reload'],
         data(){
             return {
                 isEdit: false,
@@ -171,7 +172,6 @@
                 }
             }
         },
-
         computed:{
             ...mapGetters("router",["menuList"]),
             ...mapGetters("user",["userInfo"]),

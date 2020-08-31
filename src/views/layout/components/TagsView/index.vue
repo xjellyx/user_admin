@@ -31,6 +31,7 @@ import path from 'path'
 
 export default {
   components: { ScrollPane },
+  inject:["reload"],
   data() {
     return {
       visible: false,
@@ -124,15 +125,9 @@ export default {
         }
       })
     },
-    refreshSelectedTag(view) {
-     this.$store.dispatch('tagsView/delCachedView', view).then(() => {
-        const { fullPath } = view
-        this.$nextTick(() => {
-          this.$router.replace({
-            path:  fullPath
-          })
-        })
-      })
+   async refreshSelectedTag(view) {
+     await this.$store.dispatch('tagsView/delCachedView', view)
+     this.reload()
     },
     closeSelectedTag(view) {
       this.$store.dispatch('tagsView/delView', view).then(({ visitedViews }) => {

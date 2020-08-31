@@ -45,3 +45,19 @@ export function getUserTotal() {
     method:'get'
   })
 }
+
+export function delUser(uid) {
+  return request({
+    url:"/admin/deleteUser",
+    method:'delete',
+    params: {uid:uid}
+  })
+}
+
+export function editUserInfo(data) {
+  return request({
+    url:"/admin/editUser",
+    method:'put',
+    data
+  })
+}

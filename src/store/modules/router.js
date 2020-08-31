@@ -50,69 +50,47 @@ const mutations = {
     }
 }
 
+async function reload(commit) {
+    const baseRouter = [{
+        path: '/layout',
+        name: 'layout',
+        component: "layout/index.vue",
+        meta: {
+            title: "Layout",
+            icon:"layout",
+        },
+        children: []
+    }]
+    const {data}  = await getMenuList()
+    commit('setMenuList',JSON.parse(JSON.stringify(data)))
+    const asyncRouter = data
+    formatRouter(asyncRouter)
+    baseRouter[0].children = asyncRouter
+    asyncRouterHandle(baseRouter)
+    commit('setAsyncRouter', baseRouter)
+    commit('setRouterList', routerList)
+}
+
 const actions  ={
     async setAsyncRouter({commit}) {
-        const baseRouter = [{
-            path: '/layout',
-            name: 'layout',
-            component: "layout/index.vue",
-            meta: {
-                title: "Layout",
-                icon:"layout",
-            },
-            children: []
-        }]
-       const {data}  = await getMenuList()
-        commit('setMenuList',JSON.parse(JSON.stringify(data)))
-        const asyncRouter = data
-        formatRouter(asyncRouter)
-        baseRouter[0].children = asyncRouter
-        asyncRouterHandle(baseRouter)
-        commit('setAsyncRouter', baseRouter)
-        commit('setRouterList', routerList)
-
+        await reload(commit)
         return true
     },
     async addMenu({commit,state},form) {
-        const {data} =  await setMenuList([form])
+      await setMenuList([form])
        // 重置路由
-        state.menuList.push(JSON.parse(JSON.stringify(data[0])))
-        const asyncRouter = data
-        formatRouter(asyncRouter)
-        state.asyncRouters[0].children.push(asyncRouter[0])
+        await reload(commit)
         return true
     },
     // 删除数据，改变数据状态
     async deleteMenu({commit,state},id){
         await delMenu(id)
-        state.menuList.forEach((item )=>{
-            if (item.id === id ){
-                state.menuList.splice(item,1)
-            }
-        })
-        state.asyncRouters[0].children.forEach((item) =>{
-            if (item.id === id ){
-                state.asyncRouters[0].children.splice(item,1)
-            }
-        })
+        await reload(commit)
         return true
     },
     async changeMenu({commit,state},form) {
-       const {data} = await  editMenu(form)
-        state.menuList.forEach((item )=>{
-            if (item.id === data.id ){
-                state.menuList.splice(item,1)
-                state.menuList.push(JSON.parse(JSON.stringify(data[0])))
-            }
-        })
-        state.asyncRouters[0].children.forEach((item) =>{
-            if (item.id === id ){
-                state.asyncRouters.splice(item,1)
-                const asyncRouter = data
-                formatRouter(asyncRouter)
-                state.asyncRouters[0].children.push(asyncRouter[0])
-            }
-        })
+        await  editMenu(form)
+        await reload(commit)
         return true
     }
 

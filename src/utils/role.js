@@ -1,3 +1,3 @@
 export  function checkSuperRole(role) {
-    return role===2
+    return Number(role)===2
 }

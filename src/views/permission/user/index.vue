@@ -145,7 +145,7 @@
 <script>
     import {delUser, editUserInfo, getUserKV, getUserList} from "@/api/user";
     import moment from 'moment'
-
+    import {mapGetters} from 'vuex'
     export default {
         name: "User",
         data() {
@@ -182,6 +182,9 @@
                 options: {},
                 dialogVisible: false
             }
+        },
+        computed: {
+            ...mapGetters("user",["userInfo"]),
         },
         created() {
             this.getUserAll()
@@ -261,6 +264,10 @@
                         type: 'success',
                         message: 'success!'})
                 }
+                console.log(this.userInfo,row.uid)
+                if (this.userInfo.uid === row.uid){
+                    await  this.$store.dispatch("user/getUserInfo")
+                }
                 },
             // change user status
            async changeStatus(row){
@@ -270,6 +277,9 @@
                         type: 'success',
                         message: 'success!'})
                 }
+               if (this.userInfo.uid === row.uid){
+                   await  this.$store.dispatch("user/getUserInfo")
+               }
             },
             // editUser
             async editUser(uid){
@@ -286,6 +296,9 @@
                     this.$message({
                         type: 'success',
                         message: 'success!'})
+                }
+                if (this.userInfo.uid === row.uid){
+                    await  this.$store.dispatch("user/getUserInfo")
                 }
             },
             async cancelDialog(){

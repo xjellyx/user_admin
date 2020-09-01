@@ -1,7 +1,7 @@
 <template>
     <div class="perm-menu">
         <div class="button-box clearflex">
-            <el-button v-show="isSuperRole()" @click="addMenu('0')" type="primary">Add Menu</el-button>
+            <el-button :disabled="!isSuperRole" @click="addMenu('0')" type="primary">Add Menu</el-button>
         </div>
         <el-table
                 stripe
@@ -43,23 +43,26 @@
 
             <el-table-column align="center" prop="sort" label="Sort" min-width="120" sortable></el-table-column>
 <!--            edit-->
-            <el-table-column align="center" v-if="isSuperRole()" fixed="right" label="Edit" width="350">
+            <el-table-column align="center"  fixed="right" label="Edit" width="350">
                 <template slot-scope="scope">
 <!--                    add -->
                     <el-button type="primary"
                                size="small"
                                icon="el-icon-edit"
+                               :disabled="!isSuperRole"
                                @click="addMenu(scope.row.id)"
 
                     >Add Children</el-button>
 <!--                    edit-->
                     <el-button type="primary"
                                size="small"
+                               :disabled="!isSuperRole"
                                @click="editMenu(scope.row)"
                                icon="el-icon-edit" >Edit</el-button>
 <!--                    delete-->
                     <el-button type="danger"
                                size="small"
+                               :disabled="!isSuperRole"
                                @click="deleteMenu(scope.row.id)"
                                icon="el-icon-delete">Delete</el-button>
                 </template>
@@ -140,6 +143,7 @@
                 isEdit: false,
                 dialogTitle: 'Add Menu',
                 dialogFormVisible: false,
+                isSuperRole:false,
                 form: {
                     path: '',
                     name: '',
@@ -176,10 +180,10 @@
             ...mapGetters("router",["menuList"]),
             ...mapGetters("user",["userInfo"]),
         },
+        created() {
+            this.isSuperRole=  checkSuperRole(this.userInfo.role)
+        },
         methods: {
-            isSuperRole() {
-                return checkSuperRole(this.userInfo.role)
-            },
             addMenu(id){
                 this.dialogTitle  = "Add Menu"
                 this.form.parentId = Number(id)

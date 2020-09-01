@@ -61,3 +61,9 @@ export function editUserInfo(data) {
     data
   })
 }
+export function getUserKV() {
+  return request({
+    url:"/admin/getUserKV",
+    method:'get',
+  })
+}

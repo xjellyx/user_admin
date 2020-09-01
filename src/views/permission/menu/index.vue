@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <div class="perm-menu">
         <div class="button-box clearflex">
-            <el-button v-show="isSuperRole()" @click="addMenu('0')" type="primary">add menu</el-button>
+            <el-button v-show="isSuperRole()" @click="addMenu('0')" type="primary">Add Menu</el-button>
         </div>
         <el-table
                 stripe
@@ -51,17 +51,17 @@
                                icon="el-icon-edit"
                                @click="addMenu(scope.row.id)"
 
-                    >add children</el-button>
+                    >Add Children</el-button>
 <!--                    edit-->
                     <el-button type="primary"
                                size="small"
                                @click="editMenu(scope.row)"
-                               icon="el-icon-edit" >edit</el-button>
+                               icon="el-icon-edit" >Edit</el-button>
 <!--                    delete-->
                     <el-button type="danger"
                                size="small"
                                @click="deleteMenu(scope.row.id)"
-                               icon="el-icon-delete">delete</el-button>
+                               icon="el-icon-delete">Delete</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -209,36 +209,19 @@
                     .catch(() => {
                         this.$message({
                             type: 'info',
-                            message: '已取消删除'
+                            message: 'Has been canceled'
                         })
                     })
-                // this.$confirm('This operation will permanently delete the menu under all roles, Whether to continue?', 'prompt', {
-                //     confirmButtonText: 'Confirm',
-                //     cancelButtonText: 'Cancel',
-                //     type: 'warning'
-                // })
-                //     .then(async () => {
-                //         await  this.$store.dispatch("router/deleteMenu",id)
-                //         this.$message({
-                //             type: 'success',
-                //             message: 'success'
-                //         })
-                //     })
-                //     .catch(() => {
-                //         this.$message({
-                //             type: 'info',
-                //             message: 'Undeleted'
-                //         })
-                //     })
 
             },
             // 关闭对话框
             handleClose(done) {
                 this.initForm()
+                this.isEdit = false
                 done()
             },
             changeEditStatus() {
-                this.isEdit = ! this.isEdit
+                this.isEdit = true
             },
             // 关闭弹窗
             closeDialog() {
@@ -246,18 +229,27 @@
                 this.dialogFormVisible = false
             },
             // 确认提交
-            async enterDialog(){
-                if (this.isEdit){
-                    await this.$store.dispatch("router/changeMenu",this.form)
-                }else {
-                    await  this.$store.dispatch("router/addMenu",this.form)
-                }
+            enterDialog(){
+                this.$refs.meunForm.validate(async valid =>{
+                    if (valid){
+                        if (this.isEdit){
+                            await this.$store.dispatch("router/changeMenu",this.form)
+                        }else {
+                            await  this.$store.dispatch("router/addMenu",this.form)
+                        }
+                    }else {
+                        this.$message({
+                            message:"please input data",
+                            type:"waring",
+                        })
+                    }
+                })
+
                 this.initForm()
                 this.dialogFormVisible = false
             },
             // 初始化弹窗内表格方法
             initForm() {
-                this.checkFlag = false
                 this.$refs.menuForm.resetFields()
                 this.form = {
                     path: '',

@@ -297,7 +297,7 @@
                         type: 'success',
                         message: 'success!'})
                 }
-                if (this.userInfo.uid === row.uid){
+                if (this.userInfo.uid === this.userForm.uid){
                     await  this.$store.dispatch("user/getUserInfo")
                 }
             },

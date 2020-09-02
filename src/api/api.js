@@ -1,9 +1,10 @@
 import request from "../utils/request"
 
-export function getApiList() {
+export function getApiList(data) {
     return request({
         method:"get",
-        url:"/admin/getAllApiGroup"
+        url:"/admin/getApiGroupList",
+        params: data
     })
 }
 

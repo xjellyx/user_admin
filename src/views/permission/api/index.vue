@@ -3,16 +3,16 @@
         <div class="search-term">
         <el-form :inline="true" :model="searchForm">
             <el-form-item label="Path">
-                <el-input placeholder="path" v-model="searchForm.path"></el-input>
+                <el-input placeholder="path" v-model="searchForm.path" clearable></el-input>
             </el-form-item>
             <el-form-item label="Description">
-                <el-input placeholder="description" v-model="searchForm.description"></el-input>
+                <el-input placeholder="description" v-model="searchForm.description" clearable></el-input>
             </el-form-item>
             <el-form-item label="APIGroup">
-                <el-input placeholder="apiGroup" v-model="searchForm.apiGroup"></el-input>
+                <el-input placeholder="apiGroup" v-model="searchForm.apiGroup" clearable></el-input>
             </el-form-item>
             <el-form-item label="Method">
-                <el-input placeholder="method" v-model="searchForm.method"></el-input>
+                <el-input placeholder="method" v-model="searchForm.method" clearable ></el-input>
             </el-form-item>
 
             <el-form-item>
@@ -45,16 +45,16 @@
         >
             <el-form :inline="true" :model="form" :rules="rules" ref="apiForm">
                 <el-form-item label="Path" prop="path">
-                    <el-input placeholder="path" v-model="form.path"></el-input>
+                    <el-input placeholder="path" v-model="form.path" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="Description" prop="description">
-                    <el-input placeholder="description" v-model="form.description"></el-input>
+                    <el-input placeholder="description" v-model="form.description" clearable></el-input>
                 </el-form-item>
-                <el-form-item label="APIGroup" prop="apiGroup">
-                    <el-input placeholder="apiGroup" v-model="form.apiGroup"></el-input>
+                <el-form-item label="APIGroup" prop="apiGroup" >
+                    <el-input placeholder="apiGroup" v-model="form.apiGroup" clearable></el-input>
                 </el-form-item>
                 <el-form-item label="Method" prop="method">
-                    <el-input placeholder="method" v-model="form.method"></el-input>
+                    <el-input placeholder="method" v-model="form.method" clearable></el-input>
                 </el-form-item>
             </el-form>
             <div class="warning" v-if="dialogTitle==='Add API'">New Api needs to be configured in role management before it can be used</div>
@@ -109,7 +109,9 @@
 
             },
             // submit query
-            onSubmit(){},
+            onSubmit(){
+                this.getDataList(this.searchForm)
+            },
             // open add  api dialog
             openDialog(t){
                 switch (t) {
@@ -129,8 +131,8 @@
                 this.form=row
                 this.openDialog("edit")
             },
-           async getDataList(){
-                const res  = await getApiList()
+           async getDataList(data){
+                const res  = await getApiList(data)
                this.apiData = res.data
             },
             // delete api
@@ -177,7 +179,7 @@
                                     message:res.meta.message,
                                     type:"success",
                                 })
-                            await this.getDataList()
+                            this.apiData = res.data
                             break
                         case "Edit Api":
                            const res1 = await editApi(this.form)

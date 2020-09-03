@@ -35,10 +35,10 @@
                     align="center"
                     min-width="80">
                 <template slot-scope="scope">
-                    <el-select v-model="scope.row.role"
+                    <el-select v-model="scope.row.roleRefer"
                                @change="changeAuthority(scope.row)">
                         <el-option
-                                v-for="item in options.role"
+                                v-for="item in roleOptions"
                                 :key="item.value"
                                 :label="item.label"
                                 :value="item.value"
@@ -111,9 +111,9 @@
                 </el-form-item>
 
                 <el-form-item label="Role" label-width="80px" prop="role">
-                    <el-select  v-model="userForm.role">
+                    <el-select  v-model="userForm.roleRefer">
                         <el-option
-                                v-for="item in options.role"
+                                v-for="item in roleOptions"
                                 :key="item.value"
                                 :label="item.label"
                                 :value="item.value"
@@ -144,6 +144,7 @@
 
 <script>
     import {delUser, editUserInfo, getUserKV, getUserList} from "@/api/user";
+    import {getRoleList} from "@/api/role";
     import moment from 'moment'
     import {mapGetters} from 'vuex'
     export default {
@@ -168,6 +169,7 @@
                     status: [{ required: true, message: "Please input status", trigger: "blur" }]
                 },
                 userList: [],
+                roleList:[],
                 page: 0,
                 pageSize: 10,
                 total: 0,
@@ -176,9 +178,10 @@
                     password:"",
                     username: "",
                     phone: "",
-                    role:'',
+                    roleRefer:'',
                     status:''
                 },
+                roleOptions:[],
                 options: {},
                 dialogVisible: false
             }
@@ -187,6 +190,7 @@
             ...mapGetters("user",["userInfo"]),
         },
         created() {
+            this.handlerSetRoleOptions()
             this.getUserAll()
             this.handlerGetUserKV()
         },
@@ -211,6 +215,14 @@
                     // }
                 })
                 this.total = this.userList.length
+            },
+            async handlerSetRoleOptions(){
+               const res = await getRoleList()
+                this.roleList = res.data
+                this.roleList.forEach(item =>{
+                    this.roleOptions.push({"label":item.role,"value":item.id})
+                })
+                console.log("aaaaaaaaaaaaaaa",this.roleOptions)
             },
             handleSizeChange(val) {
                 this.pageSize = val
@@ -264,7 +276,6 @@
                         type: 'success',
                         message: 'success!'})
                 }
-                console.log(this.userInfo,row.uid)
                 if (this.userInfo.uid === row.uid){
                     await  this.$store.dispatch("user/getUserInfo")
                 }

@@ -30,7 +30,7 @@
             <el-table-column label="apiGroup" prop="apiGroup" min-width="100px" ></el-table-column>
             <el-table-column label="Description" prop="description" min-width="200px" ></el-table-column>
             <el-table-column label="Method" prop="method" min-width="80px" ></el-table-column>
-            <el-table-column label="Edit" min-width="300px" >
+            <el-table-column label="Edit" min-width="180px" >
                 <template slot-scope="scope">
                     <el-button v-if="userInfo.role===2" @click="editApiGroup(scope.row)" size="small" type="primary" icon="el-icon-edit">Edit</el-button>
                     <el-button v-if="userInfo.role===2" @click="deleteApi(scope.row.id)" size="small" type="danger" icon="el-icon-delete">Delete</el-button>
@@ -135,6 +135,10 @@
                 const res  = await getApiList(data)
                this.apiData = res.data
             },
+            //
+            changeApiList(){
+                this.$store.dispatch("api/setApiList")
+            },
             // delete api
             deleteApi(id){
                 this.$confirm("This operation will permanently delete this data, Whether to continue?",
@@ -151,7 +155,7 @@
                             this.apiData.splice(index,1)
                         }
                     })
-
+                    this.changeApiList()
                     this.$message({
                         type: 'success',
                         message: 'success!'})
@@ -191,6 +195,7 @@
                         default:
                                 break
                     }
+                        this.changeApiList()
                     }else {
                         this.$message({
                             message:"please input data",

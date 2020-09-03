@@ -222,7 +222,6 @@
                 this.roleList.forEach(item =>{
                     this.roleOptions.push({"label":item.role,"value":item.id})
                 })
-                console.log("aaaaaaaaaaaaaaa",this.roleOptions)
             },
             handleSizeChange(val) {
                 this.pageSize = val

@@ -13,6 +13,7 @@
             <el-table-column align="center" label="Level" prop="level" min-width="60px" sortable></el-table-column>
             <el-table-column  fixed="right" align="center" label="Edit" min-width="180px" >
                 <template slot-scope="scope">
+                    <el-button type="primary">Set Permission</el-button>
                     <el-button icon="el-icon-edit" type="primary">Edit</el-button>
                     <el-button icon="el-icon-delete" type="danger">Delete</el-button>
                 </template>

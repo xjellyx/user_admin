@@ -178,7 +178,7 @@
                     password:"",
                     username: "",
                     phone: "",
-                    roleRefer:'',
+                    roleRefer:0,
                     status:''
                 },
                 roleOptions:[],
@@ -220,7 +220,7 @@
                const res = await getRoleList()
                 this.roleList = res.data
                 this.roleList.forEach(item =>{
-                    this.roleOptions.push({"label":item.role,"value":item.id})
+                    this.roleOptions.push({"label":item.role,"value":Number(item.id)})
                 })
             },
             handleSizeChange(val) {

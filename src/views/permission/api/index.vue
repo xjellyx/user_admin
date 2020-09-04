@@ -19,7 +19,7 @@
                 <el-button @click="onSubmit" type="primary">Query</el-button>
             </el-form-item>
             <el-form-item>
-                <el-button v-if="userInfo.role===2" @click="openDialog('add')" type="primary">Add API</el-button>
+                <el-button :disabled="!roleRoot" @click="openDialog('add')" type="primary">Add API</el-button>
             </el-form-item>
         </el-form>
         </div>
@@ -32,8 +32,8 @@
             <el-table-column label="Method" prop="method" min-width="80px" ></el-table-column>
             <el-table-column label="Edit" min-width="180px" >
                 <template slot-scope="scope">
-                    <el-button v-if="userInfo.role===2" @click="editApiGroup(scope.row)" size="small" type="primary" icon="el-icon-edit">Edit</el-button>
-                    <el-button v-if="userInfo.role===2" @click="deleteApi(scope.row.id)" size="small" type="danger" icon="el-icon-delete">Delete</el-button>
+                    <el-button :disabled="!roleRoot" @click="editApiGroup(scope.row)" size="small" type="primary" icon="el-icon-edit">Edit</el-button>
+                    <el-button :disabled="!roleRoot" @click="deleteApi(scope.row.id)" size="small" type="danger" icon="el-icon-delete">Delete</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -98,7 +98,7 @@
             }
         },
         computed:{
-            ...mapGetters("user",["userInfo"]),
+            ...mapGetters("user",["userInfo","roleRoot"]),
         },
         created() {
             this.getDataList()

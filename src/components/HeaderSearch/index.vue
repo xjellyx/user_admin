@@ -10,10 +10,10 @@
                 v-model="value"
         >
           <el-option
-                  :key="item.value"
                   :label="item.label"
                   :value="item.value"
-                  v-for="item in routerList"
+                  v-for="(item,index) in routerList"
+                  :key="index"
           ></el-option>
         </el-select>
       </div>

@@ -1,7 +1,7 @@
 <template>
     <div class="perm-menu">
         <div class="button-box clearflex">
-            <el-button :disabled="!isSuperRole" @click="addMenu('0')" type="primary">Add Menu</el-button>
+            <el-button :disabled="!roleRoot" @click="addMenu('0')" type="primary">Add Menu</el-button>
         </div>
         <el-table
                 stripe
@@ -49,20 +49,20 @@
                     <el-button type="primary"
                                size="small"
                                icon="el-icon-edit"
-                               :disabled="!isSuperRole"
+                               :disabled="!roleRoot"
                                @click="addMenu(scope.row.id)"
 
                     >Add Children</el-button>
 <!--                    edit-->
                     <el-button type="primary"
                                size="small"
-                               :disabled="!isSuperRole"
+                               :disabled="!roleRoot"
                                @click="editMenu(scope.row)"
                                icon="el-icon-edit" >Edit</el-button>
 <!--                    delete-->
                     <el-button type="danger"
                                size="small"
-                               :disabled="!isSuperRole"
+                               :disabled="!roleRoot"
                                @click="deleteMenu(scope.row.id)"
                                icon="el-icon-delete">Delete</el-button>
                 </template>
@@ -76,56 +76,56 @@
         >
             <el-form
                     :inline="true"
-                    :model="form"
+                    :model="menuForm"
                     :rules="rules"
                     label-position="top"
                     label-width="85px"
-                    ref="menuForm"
+                    ref="menuFormRef"
             >
 <!--                path -->
                 <el-form-item label="name" prop="name" style="width:30%">
                     <el-input
                             autocomplete="off"
                             placeholder="name"
-                            v-model="form.name"
+                            v-model="menuForm.name"
                     ></el-input>
                 </el-form-item>
 <!--                path-->
                 <el-form-item label="path" prop="path" style="width:30%">
                     <el-input
                             placeholder="router path"
-                            v-model="form.path"
+                            v-model="menuForm.path"
                     ></el-input>
                 </el-form-item>
 <!--                hidden-->
                 <el-form-item label="hidden"  style="width:30%">
-                    <el-select placeholder="hidden" v-model="form.hidden">
+                    <el-select placeholder="hidden" v-model="menuForm.hidden">
                         <el-option :value="false" label="no"></el-option>
                         <el-option :value="true" label="yes"></el-option>
                     </el-select>
                 </el-form-item>
 <!--                component-->
                 <el-form-item label="component" prop="component" style="width:30%">
-                    <el-input autocomplete="off" v-model="form.component"></el-input>
+                    <el-input autocomplete="off" v-model="menuForm.component"></el-input>
                 </el-form-item>
                 <el-form-item label="title" prop="meta.title" style="width:30%">
-                    <el-input autocomplete="off" v-model="form.meta.title"></el-input>
+                    <el-input autocomplete="off" v-model="menuForm.meta.title"></el-input>
                 </el-form-item>
                 <el-form-item label="icon" prop="meta.icon" style="width:30%">
-                    <el-input v-model="form.meta.icon">
+                    <el-input v-model="menuForm.meta.icon">
                         <template slot="prepend">
-                            <svg-icon :icon-class="form.meta.icon"></svg-icon>
+                            <svg-icon :icon-class="menuForm.meta.icon"></svg-icon>
                         </template>
                     </el-input>
                 </el-form-item>
                 <el-form-item label="sort" prop="sort" style="width:30%">
-                    <el-input autocomplete="off" v-model.number="form.sort"></el-input>
+                    <el-input autocomplete="off" v-model.number="menuForm.sort"></el-input>
                 </el-form-item>
             </el-form>
             <div class="warning">Only Super Administrator Can Operate</div>
             <div class="dialog-footer" slot="footer">
                 <el-button @click="closeDialog">Cancel</el-button>
-                <el-button @click="enterDialog" type="primary">Confirm</el-button>
+                <el-button @click="enterMenuDialog" type="primary">Confirm</el-button>
             </div>
         </el-dialog>
     </div>
@@ -134,6 +134,7 @@
 <script>
     import {mapGetters} from "vuex";
     import {checkSuperRole} from "@/utils/role"
+    import {addApi, editApi} from "../../../api/api";
 
     export default {
         name: "Menu",
@@ -143,8 +144,7 @@
                 isEdit: false,
                 dialogTitle: 'Add Menu',
                 dialogFormVisible: false,
-                isSuperRole:false,
-                form: {
+                menuForm: {
                     path: '',
                     name: '',
                     parentId: '',
@@ -178,22 +178,19 @@
         },
         computed:{
             ...mapGetters("router",["menuList"]),
-            ...mapGetters("user",["userInfo"]),
-        },
-        created() {
-            this.isSuperRole=  checkSuperRole(this.userInfo.role)
+            ...mapGetters("user",["userInfo","roleRoot"]),
         },
         methods: {
             addMenu(id){
                 this.dialogTitle  = "Add Menu"
-                this.form.parentId = Number(id)
+                this.menuForm.parentId = Number(id)
                 this.dialogFormVisible = true
             },
             editMenu(row){
                 this.changeEditStatus()
                 this.dialogTitle  = "Edit Menu"
                 this.dialogFormVisible = true
-                this.form=row
+                this.menuForm=row
             },
            async deleteMenu(id) {
                 this.$confirm('This operation will permanently delete the menu under all roles, Whether to continue?', 'prompt', {
@@ -233,14 +230,15 @@
                 this.dialogFormVisible = false
             },
             // 确认提交
-            enterDialog(){
-                this.$refs.meunForm.validate(async valid =>{
-                    if (valid){
-                        if (this.isEdit){
-                            await this.$store.dispatch("router/changeMenu",this.form)
-                        }else {
-                            await  this.$store.dispatch("router/addMenu",this.form)
-                        }
+            // enter
+            enterMenuDialog(){
+                this.$refs.menuFormRef.validate(async valid =>{
+                    if(valid){
+                       if (this.isEdit){
+                           await this.$store.dispatch("router/changeMenu",this.menuForm)
+                       }else {
+                         await  this.$store.dispatch("router/addMenu",this.menuForm)
+                       }
                     }else {
                         this.$message({
                             message:"please input data",
@@ -248,14 +246,11 @@
                         })
                     }
                 })
-
-                this.initForm()
-                this.dialogFormVisible = false
+                this.closeDialog()
             },
             // 初始化弹窗内表格方法
             initForm() {
-                this.$refs.menuForm.resetFields()
-                this.form = {
+                this.menuForm = {
                     path: '',
                     name: '',
                     parentId: '',

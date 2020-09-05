@@ -1,7 +1,5 @@
-import {setMenuList,getMenuList,delMenu,editMenu} from "../../api/menu";
-import { asyncRouterHandle } from '@/utils/asyncRouter';
-import Vue from "vue";
-import da from "element-ui/src/locale/lang/da";
+import {delMenu, editMenu, getMenuList, setMenuList} from "../../api/menu";
+import {asyncRouterHandle} from '@/utils/asyncRouter';
 
 const routerList = []
 const formatRouter = (routes) => {
@@ -63,12 +61,106 @@ async function reload(commit) {
     }]
     const {data}  = await getMenuList()
     commit('setMenuList',JSON.parse(JSON.stringify(data)))
-    const asyncRouter = data
-    formatRouter(asyncRouter)
-    baseRouter[0].children = asyncRouter
+    if (data.length!==0){
+        const asyncRouter = data
+        formatRouter(asyncRouter)
+        baseRouter[0].children = asyncRouter
+        }else {
+        const asyncRouter = [
+            {
+                path: '/layout/dashboard',
+                name: 'dashboard',
+                component: "dashboard/index.vue",
+                meta: {
+                    title: "Dashboard",
+                    icon: "dashboard",
+                },
+            },
+            {
+                path: '/layout/permission',
+                name: 'permission',
+                component: "permission/index.vue",
+                meta: {
+                    title: "Permission",
+                    icon: "permission",
+                },
+                children: [
+                    {
+                        path: '/layout/permission/role/index',
+                        name: 'role',
+                        component: "permission/role/index.vue",
+                        meta: {
+                            title: "Role",
+                            icon: "role",
+                        }
+                    },
+                    {
+                        path: '/layout/permission/user/index',
+                        name: 'user',
+                        component: "permission/user/index.vue",
+                        meta: {
+                            title: "User",
+                            icon: "user",
+                        }
+                    },
+                    {
+                        path: '/layout/permission/api/index',
+                        name: 'api',
+                        component: "permission/api/index.vue",
+                        meta: {
+                            title: "API",
+                            icon: "api",
+                        }
+                    },
+                    {
+                        path: '/layout/permission/menu/index',
+                        name: 'menu',
+                        component: "permission/menu/index.vue",
+                        meta: {
+                            title: "Menu",
+                            icon: "menu",
+                        }
+                    }
+                ]
+            },
+            {
+                path: '/layout/tool/index',
+                name: 'tool',
+                component: "tool/index.vue",
+                meta: {
+                    title: "Tool",
+                    icon: "tool",
+                }
+            },
+            {
+                path: '/layout/about/index',
+                name: 'about',
+                component: "about/index.vue",
+                meta: {
+                    title: "About",
+                    icon: "about",
+                }
+            },
+            {
+                path: '/layout/profile/index',
+                name: 'profile',
+                component: "profile/index.vue",
+                hidden: true,
+                meta: {
+                    title: "Profile",
+                    icon: "profile",
+                }
+            },
+        ]
+        formatRouter(asyncRouter)
+        baseRouter[0].children = asyncRouter
+    }
     asyncRouterHandle(baseRouter)
+    console.log("aaaaaaaaaaaaaaaa",baseRouter)
     commit('setAsyncRouter', baseRouter)
     commit('setRouterList', routerList)
+
+
 }
 
 const actions  ={

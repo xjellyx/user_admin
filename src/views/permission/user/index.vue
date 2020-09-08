@@ -9,31 +9,31 @@
                     label="ID"
                     sortable
                     align="center"
-                    min-width="30">
+                    min-width="30px">
             </el-table-column>
             <el-table-column
                     prop="uid"
                     label="UID"
                     align="center"
-                    min-width="100">
+                    min-width="100px">
             </el-table-column>
             <el-table-column
                     prop="createdAt"
                     label="CreatedTime"
                     sortable
                     align="center"
-                    min-width="100">
+                    min-width="100px">
             </el-table-column>
             <el-table-column
                     prop="username"
                     label="Username"
                     align="center"
-                    min-width="100">
+                    min-width="100px">
             </el-table-column>
             <el-table-column
                     label="Role"
                     align="center"
-                    min-width="80">
+                    min-width="80px">
                 <template slot-scope="scope">
                     <el-select v-model="scope.row.roleRefer"
                                @change="changeAuthority(scope.row)">
@@ -51,7 +51,7 @@
                     prop="status"
                     align="center"
                     label="Status"
-                    min-width="80">
+                    min-width="80px">
                 <template slot-scope="scope">
                     <el-select v-model="scope.row.status"
                                @change="changeStatus(scope.row)">
@@ -65,7 +65,7 @@
                     </el-select>
                 </template>
             </el-table-column>
-            <el-table-column fixed="right"  align="center" label="Edit" min-width="100">
+            <el-table-column fixed="right"  align="center" label="Edit" width="200px">
                 <template slot-scope="scope">
                     <!--                    edit-->
                     <el-button type="primary"

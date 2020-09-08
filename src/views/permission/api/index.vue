@@ -16,10 +16,10 @@
             </el-form-item>
 
             <el-form-item>
-                <el-button @click="onSubmit" type="primary">Query</el-button>
+                <el-button size="small" @click="onSubmit" type="primary">Query</el-button>
             </el-form-item>
             <el-form-item>
-                <el-button :disabled="!roleRoot" @click="openDialog('add')" type="primary">Add API</el-button>
+                <el-button size="small" :disabled="!roleRoot" @click="openDialog('add')" type="primary">Add API</el-button>
             </el-form-item>
         </el-form>
         </div>
@@ -30,7 +30,7 @@
             <el-table-column label="apiGroup" prop="apiGroup" min-width="100px" ></el-table-column>
             <el-table-column label="Description" prop="description" min-width="200px" ></el-table-column>
             <el-table-column label="Method" prop="method" min-width="80px" ></el-table-column>
-            <el-table-column label="Edit" min-width="180px" >
+            <el-table-column label="Edit" width="200px" >
                 <template slot-scope="scope">
                     <el-button :disabled="!roleRoot" @click="editApiGroup(scope.row)" size="small" type="primary" icon="el-icon-edit">Edit</el-button>
                     <el-button :disabled="!roleRoot" @click="deleteApi(scope.row.id)" size="small" type="danger" icon="el-icon-delete">Delete</el-button>

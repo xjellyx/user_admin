@@ -1,6 +1,5 @@
 # user_admin
-
-## Project setup
+# Project setup
 ```
 yarn install
 ```

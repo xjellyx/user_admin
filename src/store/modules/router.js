@@ -156,7 +156,7 @@ async function reload(commit) {
         baseRouter[0].children = asyncRouter
     }
     asyncRouterHandle(baseRouter)
-    console.log("aaaaaaaaaaaaaaaa",baseRouter)
+    // console.log("aaaaaaaaaaaaaaaa",baseRouter)
     commit('setAsyncRouter', baseRouter)
     commit('setRouterList', routerList)
 

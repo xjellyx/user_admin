@@ -1,5 +1,13 @@
 <template>
     <div class="perm-user">
+      <div class="perm-user-add">
+        <!--                    add-->
+        <el-button type="primary"
+                   size="small"
+                   @click="addUser"
+                   icon="el-icon-edit">Add User</el-button>
+        <!--                    edit-->
+      </div>
         <el-table
                 :data="userList"
                 style="width: 100%"
@@ -65,9 +73,8 @@
                     </el-select>
                 </template>
             </el-table-column>
-            <el-table-column fixed="right"  align="center" label="Edit" width="200px">
+            <el-table-column fixed="right"  align="center" label="Edit" width="350px">
                 <template slot-scope="scope">
-                    <!--                    edit-->
                     <el-button type="primary"
                                size="small"
                                @click="editUser(scope.row)"
@@ -106,7 +113,7 @@
                 <el-form-item label="Password" label-width="80px" prop="password">
                     <el-input placeholder="password" v-model="userForm.password"></el-input>
                 </el-form-item>
-                <el-form-item label="Phone" label-width="80px" prop="phone">
+                <el-form-item v-if="isAdd===false" label="Phone" label-width="80px" prop="phone">
                     <el-input placeholder="phone" v-model="userForm.phone"></el-input>
                 </el-form-item>
 
@@ -122,7 +129,7 @@
                     </el-select>
                 </el-form-item>
 
-                <el-form-item label="Status" label-width="80px" prop="status">
+                <el-form-item  v-if="isAdd===false"  label="Status" label-width="80px" prop="status">
                     <el-select  v-model="userForm.status">
                         <el-option
                                 v-for="item in options.status"
@@ -143,7 +150,7 @@
 </template>
 
 <script>
-    import {delUser, editUserInfo, getUserKV, getUserList} from "@/api/user";
+    import {delUser, editUserInfo, getUserKV, getUserList,addUser} from "@/api/user";
     import {getRoleList} from "@/api/role";
     import moment from 'moment'
     import {mapGetters} from 'vuex'
@@ -151,6 +158,7 @@
         name: "User",
         data() {
             return {
+              isAdd: false,
                 rules: {
                     username: [
                         { required: true, message: "Please input username", trigger: "blur" },
@@ -237,6 +245,11 @@
                     return 'success-row';
                 }
             },
+          addUser(){
+              this.dialogVisible = true
+              this.isAdd = true
+
+          },
             // deleteUser
             deleteUser(uid){
                 this.$confirm('This operation will permanently delete this data, Whether to continue?',
@@ -287,9 +300,8 @@
                         type: 'success',
                         message: 'success!'})
                 }
-               if (this.userInfo.uid === row.uid){
                    await  this.$store.dispatch("user/getUserInfo")
-               }
+
             },
             // editUser
             async editUser(row){
@@ -301,17 +313,26 @@
                 this.options= res.data
             },
             async enterDialog(){
-                const res = await editUserInfo(this.userForm)
-                if (res.meta.message === "success"){
+                if (this.isAdd){
+                  const res = await addUser(this.userForm)
+                  this.isAdd =false
+                  if (res.meta.message === "success"){
                     this.$message({
-                        type: 'success',
-                        message: 'success!'})
+                      type: 'success',
+                      message: 'success!'})
+                  }
+                }else {
+                  const res = await editUserInfo(this.userForm)
+                  if (res.meta.message === "success"){
+                    this.$message({
+                      type: 'success',
+                      message: 'success!'})
+                  }
                 }
-                if (this.userInfo.uid === this.userForm.uid){
-                    await  this.$store.dispatch("user/getUserInfo")
-                }
+              await  this.$store.dispatch("user/getUserInfo")
+
             },
-            async cancelDialog(){
+          cancelDialog(){
                 this.userForm = {}
                 this.dialogVisible = false
             }
@@ -327,5 +348,9 @@
 
     .el-table .success-row {
         background-color: #ebf9ec;
+    }
+    .perm-user-add {
+      padding: 10px 20px;
+      float: right;
     }
 </style>

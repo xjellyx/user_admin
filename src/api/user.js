@@ -67,3 +67,11 @@ export function getUserKV() {
     method:'get',
   })
 }
+
+export function addUser(data) {
+  return request({
+    url:"/admin/addUser",
+    method:'post',
+    data
+  })
+}

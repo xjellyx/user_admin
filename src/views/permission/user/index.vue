@@ -70,7 +70,7 @@
                     <!--                    edit-->
                     <el-button type="primary"
                                size="small"
-                               @click="editUser(scope.row.uid)"
+                               @click="editUser(scope.row)"
                                icon="el-icon-edit">Edit</el-button>
                     <!--                    delete-->
                     <el-button type="danger"
@@ -110,7 +110,7 @@
                     <el-input placeholder="phone" v-model="userForm.phone"></el-input>
                 </el-form-item>
 
-                <el-form-item label="Role" label-width="80px" prop="role">
+                <el-form-item label="Role" label-width="80px" prop="roleRefer">
                     <el-select  v-model="userForm.roleRefer">
                         <el-option
                                 v-for="item in roleOptions"
@@ -163,7 +163,7 @@
                     phone: [
                         { required: true, message: "Please input Phone", trigger: "blur" }
                     ],
-                    role: [
+                  roleRefer: [
                         { required: true, message: "Please input role", trigger: "blur" }
                     ],
                     status: [{ required: true, message: "Please input status", trigger: "blur" }]
@@ -269,7 +269,7 @@
 
             },
             async changeAuthority(row){
-                const res = await editUserInfo({uid:row.uid,role:row.role})
+                const res = await editUserInfo({uid:row.uid,roleRefer:row.roleRefer})
                 if (res.meta.message === "success"){
                     this.$message({
                         type: 'success',
@@ -292,9 +292,9 @@
                }
             },
             // editUser
-            async editUser(uid){
+            async editUser(row){
                 this.dialogVisible = true
-                this.userForm.uid = uid
+                this.userForm = row
             },
             async handlerGetUserKV(){
                 const res= await getUserKV()

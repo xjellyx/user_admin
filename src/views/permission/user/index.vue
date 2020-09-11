@@ -6,10 +6,11 @@
                    size="small"
                    @click="addUser"
                    icon="el-icon-edit">Add User</el-button>
-        <!--                    edit-->
       </div>
         <el-table
                 :data="userList"
+                stripe
+                border
                 style="width: 100%"
                 :row-class-name="tableRowClassName">
             <el-table-column

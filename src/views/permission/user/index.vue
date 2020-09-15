@@ -27,11 +27,13 @@
                     min-width="100px">
             </el-table-column>
             <el-table-column
-                    prop="createdAt"
                     label="CreatedTime"
                     sortable
                     align="center"
-                    min-width="100px">
+                    min-width="100px"
+            >              <template slot-scope="scope">
+                {{ moment(scope.row.createdAt).format("YYYY-MM-DD hh:mm:ss")}}
+              </template>
             </el-table-column>
             <el-table-column
                     prop="username"
@@ -190,6 +192,7 @@
                     roleRefer:0,
                     status:''
                 },
+              moment:moment,
                 roleOptions:[],
                 options: {},
                 dialogVisible: false
@@ -207,22 +210,22 @@
             async getUserAll(){
                 const {data} = await getUserList({})
                 this.userList = data
-                this.userList.forEach(item =>{
-                    item.createdAt = moment(item.createdAt).format("YYYY-MM-DD hh:mm:ss")
-                    // 0 role general; 1 role admin; 2 role superAdmin
-                    // switch (item.role) {
-                    //     case 0:
-                    //         item.role = "general"
-                    //         break
-                    //     case 1:
-                    //         item.role = "admin"
-                    //         break
-                    //     case 2:
-                    //         item.role ="superAdmin"
-                    //         break
-                    //
-                    // }
-                })
+                // this.userList.forEach(item =>{
+                //     item.createdAt = moment(item.createdAt).format("YYYY-MM-DD hh:mm:ss")
+                //     // 0 role general; 1 role admin; 2 role superAdmin
+                //     // switch (item.role) {
+                //     //     case 0:
+                //     //         item.role = "general"
+                //     //         break
+                //     //     case 1:
+                //     //         item.role = "admin"
+                //     //         break
+                //     //     case 2:
+                //     //         item.role ="superAdmin"
+                //     //         break
+                //     //
+                //     // }
+                // })
                 this.total = this.userList.length
             },
             async handlerSetRoleOptions(){

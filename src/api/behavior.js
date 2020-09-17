@@ -4,15 +4,15 @@ export  function getBehaviorList (param) {
     return request({
         url:"/admin/getBehaviorList",
         method:"get",
-        param:param
+        params:param
     })
 }
 
-export  function removeBehaviorList(ids){
+export  function removeBehaviorList(data){
     return request({
         url:"/admin/removeBehaviors",
         method:"delete",
-        param:{"ids":ids}
+        data
     })
 }
 

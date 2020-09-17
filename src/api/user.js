@@ -46,6 +46,14 @@ export function getUserTotal() {
   })
 }
 
+
+export function getUserCount() {
+  return request({
+    method:"get",
+    url:"/admin/userTotal",
+  })
+}
+
 export function delUser(uid) {
   return request({
     url:"/admin/deleteUser",

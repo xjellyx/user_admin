@@ -24,7 +24,7 @@
         </el-form>
         </div>
 <!--        table-->
-        <el-table :data="apiData"  border stripe>
+        <el-table :data="apiData.slice((page-1)*pageSize,page*pageSize)"  border stripe>
             <el-table-column label="ID" prop="id" min-width="60px" sortable></el-table-column>
             <el-table-column label="Path" prop="path" min-width="180px" ></el-table-column>
             <el-table-column label="apiGroup" prop="apiGroup" min-width="100px" ></el-table-column>
@@ -37,6 +37,17 @@
                 </template>
             </el-table-column>
         </el-table>
+      <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="page"
+          :page-size="pageSize"
+          :total="total"
+          :page-sizes="[10, 30, 50, 100]"
+          :style="{float:'right',padding:'20px'}"
+          layout=" total, sizes, prev, pager, next, jumper"
+        >
+      </el-pagination>
 
 <!--        dialog-->
         <el-dialog :before-close="handleCloseDialog"
@@ -75,6 +86,9 @@
             return {
                 dialogTitle:'',
                 dialogApiVisible:false,
+                total:0,
+                page:1,
+                pageSize:10,
                 searchForm:{
                     path:'',
                     description:'',
@@ -132,8 +146,9 @@
                 this.openDialog("edit")
             },
            async getDataList(data){
-                const res  = await getApiList(data)
-               this.apiData = res.data
+              const res  = await getApiList(data)
+              this.apiData = res.data
+              this.total = res.data.length
             },
             //
             changeApiList(){
@@ -204,7 +219,21 @@
                     }
                 })
                 this.handleCloseDialog()
-            }
+            },
+          handleSizeChange(val) {
+            this.pageSize = val
+            this.page = 1
+          },
+          handleCurrentChange(val) {
+            this.page  = val
+          },
+          getTableData(page = this.page, pageSize = this.pageSize) {
+            const table =  this.listApi({ page, pageSize, ...this.searchInfo })
+            this.tableData = table.data.list
+            this.total = table.data.total
+            this.page = table.data.page
+            this.pageSize = table.data.pageSize
+          }
         }
     }
 </script>

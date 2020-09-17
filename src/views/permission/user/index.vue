@@ -153,7 +153,7 @@
 </template>
 
 <script>
-    import {delUser, editUserInfo, getUserKV, getUserList,addUser} from "@/api/user";
+    import {delUser, editUserInfo, getUserKV, getUserList,addUser,getUserCount} from "@/api/user";
     import {getRoleList} from "@/api/role";
     import moment from 'moment'
     import {mapGetters} from 'vuex'
@@ -201,32 +201,23 @@
         computed: {
             ...mapGetters("user",["userInfo"]),
         },
-        created() {
-            this.handlerSetRoleOptions()
-            this.getUserAll()
-            this.handlerGetUserKV()
+         created() {
+             this.handlerSetRoleOptions()
+             this.handleGetUserList()
+             this.handlerGetUserKV()
+            this.handleUserTotal()
+
         },
         methods: {
-            async getUserAll(){
-                const {data} = await getUserList({})
+          // 用戶總數
+          async handleUserTotal(){
+            const res = await getUserCount()
+            this.total = res.data
+          },
+          // 獲取用戶
+            async handleGetUserList(){
+                const {data} = await getUserList({page: this.page, pageSize: this.pageSize})
                 this.userList = data
-                // this.userList.forEach(item =>{
-                //     item.createdAt = moment(item.createdAt).format("YYYY-MM-DD hh:mm:ss")
-                //     // 0 role general; 1 role admin; 2 role superAdmin
-                //     // switch (item.role) {
-                //     //     case 0:
-                //     //         item.role = "general"
-                //     //         break
-                //     //     case 1:
-                //     //         item.role = "admin"
-                //     //         break
-                //     //     case 2:
-                //     //         item.role ="superAdmin"
-                //     //         break
-                //     //
-                //     // }
-                // })
-                this.total = this.userList.length
             },
             async handlerSetRoleOptions(){
                const res = await getRoleList()
@@ -238,9 +229,11 @@
             handleSizeChange(val) {
                 this.pageSize = val
                 this.page = 1
+                this.handleGetUserList()
             },
             handleCurrentChange(val) {
                 this.page  = val
+              this.handleGetUserList()
             },
             tableRowClassName({row}) {
                 if (row.status === 4) {

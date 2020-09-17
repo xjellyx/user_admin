@@ -155,6 +155,14 @@ async function reload(commit) {
         formatRouter(asyncRouter)
         baseRouter[0].children = asyncRouter
     }
+    // 主題更改
+    // baseRouter[0].children.push({    path: '/layout/theme',
+    //     name: 'theme',
+    //     component: "theme/index.vue",
+    //     meta: {
+    //         title: "Theme",
+    //         icon:"theme",
+    //     },})
     asyncRouterHandle(baseRouter)
     // console.log("aaaaaaaaaaaaaaaa",baseRouter)
     commit('setAsyncRouter', baseRouter)

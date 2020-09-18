@@ -70,14 +70,22 @@
 
             <div style="position:relative">
                 <div class="tips">
-                    <span>Username : admin</span>
-                    <span>Password : any</span>
+                    <a  href="https://github.com/olongfen/gorm-gin-admin">
+                      <img style="height: 25px;width: 25px;" src="@/assets/github.png"/>
+                    </a>
+                  <a style="margin-left: 40px" href="https://github.com/olongfen/user_admin">
+                    <img style="height: 25px;width: 25px;" src="@/assets/web.png"/>
+                  </a>
+<!--                  <a style="margin-left: 40px" href="https://github.com/olongfen/gorm-gin-admin">-->
+<!--                    <img style="height: 25px;width: 25px;" src="@/assets/github.png"/>-->
+<!--                  </a>-->
+<!--                  <a style="margin-left: 40px" href="https://github.com/olongfen/gorm-gin-admin">-->
+<!--                    <img style="height: 25px;width: 25px;" src="@/assets/github.png"/>-->
+<!--                  </a>-->
                 </div>
-                <div class="tips">
-                    <span style="margin-right:18px;">Username : editor</span>
-                    <span>Password : any</span>
-                </div>
-
+              <div class="tips">
+                <span >Copyright © 2020 💖olongfen</span>
+              </div>
 <!--                <el-button class="thirdparty-button" type="primary" @click="showDialog=true">-->
 <!--                    Or connect with-->
 <!--                </el-button>-->
@@ -326,11 +334,12 @@
         }
 
         .tips {
+            flex: content-box;
             font-size: 14px;
             color: #fff;
             margin-bottom: 10px;
-
             span {
+                align-content: center;
                 &:first-of-type {
                     margin-right: 16px;
                 }

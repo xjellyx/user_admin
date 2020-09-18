@@ -1,10 +1,11 @@
 import axios from "axios";
 import store from "../store";
 import {resetRouter} from "../router";
+import {baseApi} from "../settings"
 import { MessageBox, Message } from 'element-ui'
 
 const services = axios.create({
-  baseURL: "/api/v1",
+  baseURL: baseApi,
   timeout: 60000,
   headers: {
     "Content-Type": "application/json"

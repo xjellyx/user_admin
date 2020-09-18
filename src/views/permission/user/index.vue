@@ -5,7 +5,7 @@
         <el-button type="primary"
                    size="small"
                    @click="addUser"
-                   icon="el-icon-edit">Add User</el-button>
+                   icon="el-icon-edit">Add user</el-button>
       </div>
         <el-table
                 :data="userList"

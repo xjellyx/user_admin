@@ -19,7 +19,7 @@
                 <el-button size="small" @click="onSubmit" type="primary">Query</el-button>
             </el-form-item>
             <el-form-item>
-                <el-button size="small" :disabled="!roleRoot" @click="openDialog('add')" type="primary">Add API</el-button>
+                <el-button size="small" :disabled="!roleRoot" @click="openDialog('add')" type="primary">Add api</el-button>
             </el-form-item>
         </el-form>
         </div>

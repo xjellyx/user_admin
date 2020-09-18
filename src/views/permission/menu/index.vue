@@ -1,7 +1,7 @@
 <template>
     <div class="perm-menu">
         <div class="button-box clearflex">
-            <el-button :disabled="!roleRoot" @click="addMenu('0')" type="primary">Add Menu</el-button>
+            <el-button :disabled="!roleRoot" @click="addMenu('0')" type="primary">Add menu</el-button>
         </div>
         <el-table
                 stripe
@@ -52,7 +52,7 @@
                                :disabled="!roleRoot"
                                @click="addMenu(scope.row.id)"
 
-                    >Add Children</el-button>
+                    >Add children</el-button>
 <!--                    edit-->
                     <el-button type="primary"
                                size="small"

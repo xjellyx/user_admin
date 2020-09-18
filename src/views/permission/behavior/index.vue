@@ -6,7 +6,14 @@
           <el-input placeholder="method" v-model="searchInfo.method"></el-input>
         </el-form-item>
         <el-form-item label="Time">
-          <el-input placeholder="created time" v-model="searchInfo.createdAt"></el-input>
+          <el-date-picker
+              v-model="timeRange"
+              type="daterange"
+              range-separator="to"
+              start-placeholder="Start date"
+              end-placeholder="End date">
+          </el-date-picker>
+<!--          <el-input placeholder="created time" v-model="searchInfo.createdAt"></el-input>-->
         </el-form-item>
         <el-form-item label="Username">
           <el-input placeholder="username" v-model="searchInfo.username"></el-input>
@@ -58,7 +65,7 @@
       ></el-pagination>
     </div>
     <div style="margin-top: 40px;display: flex; float: right;flex: content">
-      <el-button type="primary" @click="toggleSelection()">Cancel Selection</el-button>
+      <el-button type="primary" @click="toggleSelection()">Cancel selection</el-button>
     </div>
   </div>
 </template>
@@ -74,6 +81,7 @@ export default {
       total:0,
       behaviorList:[],
       multipleSelection:[],
+      timeRange:[],
     searchInfo: {},
       moment:moment
   }},
@@ -82,6 +90,12 @@ export default {
     this.total = data
     const res  = await getBehaviorList({"page":this.page,"pageSize":this.pageSize})
     this.behaviorList = res.data
+  },
+  watch:{
+    timeRange: function (val) {
+      this.searchInfo.startTime=val[0]
+      this.searchInfo.endTime=val[1]
+    }
   },
   methods: {
     // 查找數據

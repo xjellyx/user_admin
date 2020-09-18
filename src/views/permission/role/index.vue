@@ -1,7 +1,7 @@
 <template>
     <div class="perm-role">
         <div class="perm-role-add">
-            <el-button @click="handleAddRole" size="small"  type="primary">Add Role</el-button>
+            <el-button @click="handleAddRole" size="small"  type="primary">Add role</el-button>
         </div>
         <el-table :data="roleData"
                   stripe
@@ -13,7 +13,7 @@
             <el-table-column align="center" label="Level" prop="level" min-width="60px" sortable></el-table-column>
             <el-table-column  fixed="right" align="center" label="Edit" width="400px" >
                 <template slot-scope="scope">
-                    <el-button @click="openRoleDrawer(scope.row)" type="primary" size="small">Set Permission</el-button>
+                    <el-button @click="openRoleDrawer(scope.row)" type="primary" size="small">Set permission</el-button>
                     <el-button @click="handleEditRole(scope.row)" icon="el-icon-edit" size="small" type="primary">Edit</el-button>
                     <el-button @click="deleteRole(scope.row)" icon="el-icon-delete" size="small" type="danger">Delete</el-button>
                 </template>

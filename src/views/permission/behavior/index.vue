@@ -40,6 +40,11 @@
         <el-table-column       prop="ip"  align="center" label="IP" min-width="120"></el-table-column>
         <el-table-column       prop="path"  align="center" label="Path" min-width="120"></el-table-column>
         <el-table-column      prop="method"   align="center" label="Method" min-width="120"></el-table-column>
+        <el-table-column        align="center" label="Edit" width="180">
+          <template slot-scope="scope">
+            <el-button type="danger" @click="handleRemoveBehavior(scope.row)">Delete</el-button>
+          </template>
+        </el-table-column>
       </el-table>
       <el-pagination
               :current-page="page"
@@ -121,6 +126,14 @@ export default {
     // 选中的数据
     handleSelectionChange(val) {
       this.multipleSelection = val;
+    },
+    async handleRemoveBehavior(row){
+      const ids =[]
+      ids.push(row.id)
+      const res = await removeBehaviorList( {"ids":ids})
+      if (res){
+        this.$message.success("remove behavior success")
+      }
     }
   },
 }

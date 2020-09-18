@@ -167,7 +167,7 @@ export default {
       if (this.radio ==='github.io'){
         this.blogHref = "https://olongfen.github.io"
       }else {
-
+      this.blogHref='http://www.olongfen.ltd/blog/#/'
       }
 
     }

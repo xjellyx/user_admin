@@ -40,7 +40,7 @@
         <el-table-column       prop="id"  align="center" label="ID" min-width="80"></el-table-column>
         <el-table-column       prop="username"  align="center" label="Username" min-width="120"></el-table-column>
         <el-table-column         align="center" label="CreatedTime" min-width="120">
-          <template slot-scope="scope">{{ moment(scope.row.createdAt).format("YYYY-MM-DD hh:mm:ss")}}</template>
+          <template slot-scope="scope">{{ moment(scope.row.createdAt).format("YYYY-MM-DD HH:mm:ss")}}</template>
         </el-table-column>
 
         <el-table-column       prop="behavior"  align="center" label="Behavior" min-width="120"></el-table-column>
@@ -83,7 +83,7 @@ export default {
       multipleSelection:[],
       timeRange:[],
     searchInfo: {},
-      moment:moment
+      moment:moment,
   }},
   async created() {
     const {data} = await behaviorCount()

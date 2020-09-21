@@ -32,7 +32,7 @@
                     align="center"
                     min-width="100px"
             >              <template slot-scope="scope">
-                {{ moment(scope.row.createdAt).format("YYYY-MM-DD hh:mm:ss")}}
+                {{ moment(scope.row.createdAt).format("YYYY-MM-DD HH:mm:ss")}}
               </template>
             </el-table-column>
             <el-table-column

@@ -1,7 +1,7 @@
 <template>
     <div class="perm-menu">
         <div class="button-box clearflex">
-            <el-button :disabled="!roleRoot" @click="addMenu('0')" type="primary">Add menu</el-button>
+            <el-button :disabled="roleDev" @click="addMenu('0')" type="primary">Add menu</el-button>
         </div>
         <el-table
                 stripe
@@ -49,20 +49,20 @@
                     <el-button type="primary"
                                size="small"
                                icon="el-icon-edit"
-                               :disabled="!roleRoot"
+                            :disabled="roleDev"
                                @click="addMenu(scope.row.id)"
 
                     >Add children</el-button>
 <!--                    edit-->
                     <el-button type="primary"
                                size="small"
-                               :disabled="!roleRoot"
+                               :disabled="roleDev"
                                @click="editMenu(scope.row)"
                                icon="el-icon-edit" >Edit</el-button>
 <!--                    delete-->
                     <el-button type="danger"
                                size="small"
-                               :disabled="!roleRoot"
+                            :disabled="roleDev"
                                @click="deleteMenu(scope.row.id)"
                                icon="el-icon-delete">Delete</el-button>
                 </template>
@@ -133,14 +133,14 @@
 
 <script>
     import {mapGetters} from "vuex";
-    import {checkSuperRole} from "@/utils/role"
-    import {addApi, editApi} from "../../../api/api";
+    import {compareRoleLevel} from "@/utils";
 
     export default {
         name: "Menu",
         // inject: ['reload'],
         data(){
             return {
+                roleDev:false,
                 isEdit: false,
                 dialogTitle: 'Add Menu',
                 dialogFormVisible: false,
@@ -178,9 +178,13 @@
         },
         computed:{
             ...mapGetters("router",["menuList"]),
-            ...mapGetters("user",["userInfo","roleRoot"]),
+          ...mapGetters("settings",["settings"]),
+            ...mapGetters("user",["userInfo"]),
         },
-        methods: {
+      created() {
+        this.roleDev= compareRoleLevel(this.settings.maxRoleLevel,this.userInfo.role.level)
+          },
+      methods: {
             addMenu(id){
                 this.dialogTitle  = "Add Menu"
                 this.menuForm.parentId = Number(id)

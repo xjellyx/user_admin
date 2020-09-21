@@ -19,7 +19,7 @@
                 <el-button size="small" @click="onSubmit" type="primary">Query</el-button>
             </el-form-item>
             <el-form-item>
-                <el-button size="small" :disabled="!roleRoot" @click="openDialog('add')" type="primary">Add api</el-button>
+                <el-button size="small" :disabled="roleDev" @click="openDialog('add')" type="primary">Add api</el-button>
             </el-form-item>
         </el-form>
         </div>
@@ -32,8 +32,8 @@
             <el-table-column label="Method" prop="method" min-width="80px" ></el-table-column>
             <el-table-column label="Edit" width="200px" >
                 <template slot-scope="scope">
-                    <el-button :disabled="!roleRoot" @click="editApiGroup(scope.row)" size="small" type="primary" icon="el-icon-edit">Edit</el-button>
-                    <el-button :disabled="!roleRoot" @click="deleteApi(scope.row.id)" size="small" type="danger" icon="el-icon-delete">Delete</el-button>
+                    <el-button :disabled="roleDev" @click="editApiGroup(scope.row)" size="small" type="primary" icon="el-icon-edit">Edit</el-button>
+                    <el-button :disabled="roleDev" @click="deleteApi(scope.row.id)" size="small" type="danger" icon="el-icon-delete">Delete</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -80,10 +80,12 @@
 <script>
     import {addApi,editApi,removeApi,getApiList} from "../../../api/api";
     import {mapGetters} from 'vuex'
+    import {compareRoleLevel} from "@/utils";
     export default {
         name: "index",
         data(){
             return {
+              roleDev:false,
                 dialogTitle:'',
                 dialogApiVisible:false,
                 total:0,
@@ -112,10 +114,13 @@
             }
         },
         computed:{
-            ...mapGetters("user",["userInfo","roleRoot"]),
+          ...mapGetters("settings",["settings"]),
+            ...mapGetters("user",["userInfo"]),
         },
         created() {
             this.getDataList()
+          console.log(compareRoleLevel(this.settings.maxRoleLevel,this.userInfo.role.level))
+          this.roleDev = compareRoleLevel(this.settings.maxRoleLevel,this.userInfo.role.level)
             },
         methods:{
             // sort change

@@ -1,5 +1,6 @@
 import router from "./router";
 import store from "./store";
+import {getProjectSettings} from "./api/config";
 
 
 let asyncRouterFlag = 0
@@ -22,6 +23,8 @@ router.beforeEach(async(to, from, next) => {
                 asyncRouterFlag++
                 await store.dispatch('router/setAsyncRouter')
                 await store.dispatch("user/getUserInfo")
+                // 获取系统配置信息
+                await store.dispatch("settings/getSettings")
                 const asyncRouters = store.getters['router/asyncRouters']
                 router.addRoutes(asyncRouters)
                 next({...to, replace: true })

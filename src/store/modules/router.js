@@ -1,4 +1,5 @@
 import {delMenu, editMenu, getMenuList, setMenuList} from "../../api/menu";
+import {getProjectSettings} from "../../api/config";
 import {asyncRouterHandle} from '@/utils/asyncRouter';
 
 const routerList = []

@@ -355,3 +355,7 @@ export function removeClass(ele, cls) {
     ele.className = ele.className.replace(reg, ' ')
   }
 }
+
+export function compareRoleLevel(l1,l2){
+  return Number(l1)>Number(l2)
+}

@@ -46,7 +46,7 @@
                     align="center"
                     min-width="80px">
                 <template slot-scope="scope">
-                    <el-select v-model="scope.row.roleRefer"
+                    <el-select :disabled="scope.row.uid===userInfo.uid || Number(scope.row.role.level) >= Number(userInfo.role.level)" v-model="scope.row.roleRefer"
                                @change="changeAuthority(scope.row)">
                         <el-option
                                 v-for="item in roleOptions"
@@ -64,7 +64,7 @@
                     label="Status"
                     min-width="80px">
                 <template slot-scope="scope">
-                    <el-select v-model="scope.row.status"
+                    <el-select :disabled="scope.row.uid===userInfo.uid || Number(scope.row.role.level) >= Number(userInfo.role.level)" v-model="scope.row.status"
                                @change="changeStatus(scope.row)">
                         <el-option
                                 v-for="item in options.status"
@@ -78,12 +78,12 @@
             </el-table-column>
             <el-table-column fixed="right"  align="center" label="Edit" width="350px">
                 <template slot-scope="scope">
-                    <el-button type="primary"
+                    <el-button :disabled="scope.row.uid===userInfo.uid || Number(scope.row.role.level) >= Number(userInfo.role.level)" type="primary"
                                size="small"
                                @click="editUser(scope.row)"
                                icon="el-icon-edit">Edit</el-button>
                     <!--                    delete-->
-                    <el-button type="danger"
+                    <el-button :disabled="scope.row.uid===userInfo.uid || Number(scope.row.role.level) >= Number(userInfo.role.level)" type="danger"
                                size="small"
                                @click="deleteUser(scope.row.uid)"
                                icon="el-icon-delete">Delete</el-button>
@@ -106,7 +106,7 @@
                 :visible.sync="dialogVisible"
                 center
         >
-            <el-form  :inline="true" :rules="rules" ref="userForm"
+            <el-form  :inline="true" :rules="isAdd?rules:{}" ref="userForm"
                      label-position="top"
                      label-width="85px"
                      :model="userForm">
@@ -304,6 +304,7 @@
             async editUser(row){
                 this.dialogVisible = true
                 this.userForm = row
+                this.isAdd = false
             },
             async handlerGetUserKV(){
                 const res= await getUserKV()
@@ -327,6 +328,7 @@
                   }
                 }
               await  this.$store.dispatch("user/getUserInfo")
+              this.dialogVisible = false
 
             },
           cancelDialog(){

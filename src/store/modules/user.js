@@ -10,7 +10,6 @@ const state = {
   username: "",
   avatar: "",
   userInfo: {},
-  roleRoot:false,
 };
 
 const getters = {
@@ -18,7 +17,6 @@ const getters = {
   username: state => state.username,
   avatar: state => state.avatar,
   userInfo: state => state.userInfo,
-  roleRoot: state => state.roleRoot
 };
 const mutations = {
   setToken(state, token) {
@@ -33,7 +31,6 @@ const mutations = {
   },
   setUserInfo(state, userInfo) {
     state.userInfo = userInfo;
-    state.roleRoot = userInfo.role.role === 'root'
   },
 };
 

@@ -1,7 +1,7 @@
 <template>
     <div class="perm-role">
         <div class="perm-role-add">
-            <el-button @click="handleAddRole" size="small"  type="primary">Add role</el-button>
+            <el-button :disabled="roleDev" @click="handleAddRole" size="small"  type="primary">Add role</el-button>
         </div>
         <el-table :data="roleData"
                   stripe
@@ -13,9 +13,9 @@
             <el-table-column align="center" label="Level" prop="level" min-width="60px" sortable></el-table-column>
             <el-table-column  fixed="right" align="center" label="Edit" width="400px" >
                 <template slot-scope="scope">
-                    <el-button @click="openRoleDrawer(scope.row)" type="primary" size="small">Set permission</el-button>
-                    <el-button @click="handleEditRole(scope.row)" icon="el-icon-edit" size="small" type="primary">Edit</el-button>
-                    <el-button @click="deleteRole(scope.row)" icon="el-icon-delete" size="small" type="danger">Delete</el-button>
+                    <el-button :disabled="roleDev" @click="openRoleDrawer(scope.row)" type="primary" size="small">Set permission</el-button>
+                    <el-button :disabled="roleDev" @click="handleEditRole(scope.row)" icon="el-icon-edit" size="small" type="primary">Edit</el-button>
+                    <el-button :disabled="roleDev" @click="deleteRole(scope.row)" icon="el-icon-delete" size="small" type="danger">Delete</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -56,14 +56,17 @@
 
 <script>
     import {getRoleList,getRoleLevelList,editRole,removeRole,addRole} from "@/api/role";
+    import {compareRoleLevel} from "@/utils"
     import Apis from './components/apis'
+    import {mapGetters} from "vuex";
 
     export default {
         name: "index",
       components:{Apis},
         data(){
             return {
-                activeRow: {},
+              roleDev:false,
+              activeRow: {},
               value:[],
                 roleForm:{
                   role:'',
@@ -87,10 +90,16 @@
             }
         },
         created() {
+          // console.log(Number(this.settings.maxRoleLevel)>Number(this.userInfo.role.level))
+          this.roleDev = compareRoleLevel(this.settings.maxRoleLevel,this.userInfo.role.level)
           this.handlerGetRoleList()
           this.setRoleLevelOptions()
 
         },
+      computed:{
+        ...mapGetters("settings",["settings"]),
+        ...mapGetters("user",["userInfo"]),
+      },
         methods: {
           // set role level options
             async setRoleLevelOptions(){

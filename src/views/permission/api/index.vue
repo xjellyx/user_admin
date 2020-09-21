@@ -78,7 +78,7 @@
 </template>
 
 <script>
-    import {addApi,editApi,removeApi,getApiList} from "../../../api/api";
+    import {addApi,editApi,removeApi,getApiListAll} from "../../../api/api";
     import {mapGetters} from 'vuex'
     import {compareRoleLevel} from "@/utils";
     export default {
@@ -119,8 +119,7 @@
         },
         created() {
             this.getDataList()
-          console.log(compareRoleLevel(this.settings.maxRoleLevel,this.userInfo.role.level))
-          this.roleDev = compareRoleLevel(this.settings.maxRoleLevel,this.userInfo.role.level)
+          console.log()
             },
         methods:{
             // sort change
@@ -151,7 +150,7 @@
                 this.openDialog("edit")
             },
            async getDataList(data){
-              const res  = await getApiList(data)
+              const res  = await getApiListAll(data)
               this.apiData = res.data
               this.total = res.data.length
             },

@@ -1,4 +1,4 @@
-import {getApiList} from "../../api/api"
+import {getApiListAll} from "../../api/api"
 
 const state = {
     apiList: []
@@ -12,7 +12,7 @@ const mutations = {
 
 const actions = {
     async setApiList({commit}){
-        const res = await getApiList()
+        const res = await getApiListAll()
         commit("SET_API_LIST",res.data)
     }
 }

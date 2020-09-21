@@ -8,6 +8,13 @@ export function getApiList(data) {
     })
 }
 
+export function getApiListAll() {
+    return request({
+        method:"get",
+        url:"/admin/getApiGroupListAll",
+    })
+}
+
 export function removeApi(id) {
     return request({
         method:'delete',

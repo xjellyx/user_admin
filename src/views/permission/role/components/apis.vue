@@ -18,7 +18,7 @@
 
 <script>
 // import {mapGetters} from 'vuex'
-import {getApiList} from "@/api/api";
+import {getApiListAll} from "@/api/api";
 import {getRoleAPIList,addRoleApi,removeRoleApi} from "@/api/casbin";
 
 export default {
@@ -58,7 +58,7 @@ export default {
   //
   methods: {
     async handleSetAPITree(){
-      const {data} = await getApiList()
+      const {data} = await getApiListAll()
       this.apiTreeData = []
       const apiObject = {}
 

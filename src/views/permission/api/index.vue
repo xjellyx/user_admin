@@ -119,7 +119,7 @@
         },
         created() {
             this.getDataList()
-          console.log()
+            this.roleDev=compareRoleLevel(this.settings.maxRoleLevel,this.userInfo.role.level)
             },
         methods:{
             // sort change

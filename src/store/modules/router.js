@@ -5,7 +5,8 @@ import {asyncRouterHandle} from '@/utils/asyncRouter';
 const routerList = []
 const formatRouter = (routes) => {
     routes && routes.map(item => {
-        if ((!item.children || item.children.every(ch => ch.hidden)) && item.name !== '404') {
+        if ((!item.children || item.children.every(ch => ch.hidden)) &&
+            (item.name !== '404' ||  item.name !== '401')) {
             routerList.push({ label: item.meta.title, value: item.name })
         }
         item.meta.hidden = item.hidden

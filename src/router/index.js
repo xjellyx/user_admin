@@ -25,13 +25,21 @@ Vue.use(VueRouter)
       name: "404",
       hidden: true,
       meta: {
-        title: "迷路了*。*",
+        title: "Be lost*。*",
       },
-      component:() => import( '@/views/error/index.vue')
+      component:() => import( '@/views/error/404.vue')
+    }, {
+      path: "/401",
+      name: "401",
+      hidden: true,
+      meta: {
+        title: "Permission denied*。*",
+      },
+      component:() => import( '@/views/error/401.vue')
     },
     {
       path: "*",
-      component:() => import( '@/views/error/index.vue')
+      component:() => import( '@/views/error/404.vue')
     }
 ]
 

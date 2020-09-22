@@ -78,7 +78,7 @@
 </template>
 
 <script>
-    import {addApi,editApi,removeApi,getApiListAll} from "../../../api/api";
+    import {addApi,editApi,removeApi,getApiListAll,getApiList} from "../../../api/api";
     import {mapGetters} from 'vuex'
     import {compareRoleLevel} from "@/utils";
     export default {
@@ -127,8 +127,13 @@
 
             },
             // submit query
-            onSubmit(){
-                this.getDataList(this.searchForm)
+            async onSubmit(){
+              // 可以写死，ａｐｉ数据后端也有分页获取，数据量比较少直接一次性获取
+              this.searchForm.page =1
+              this.searchForm.pageSize = 100
+               const res = await getApiList(this.searchForm)
+              this.apiData = res.data
+              this.total = res.data.length
             },
             // open add  api dialog
             openDialog(t){
